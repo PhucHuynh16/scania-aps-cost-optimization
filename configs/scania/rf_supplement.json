@@ -1,0 +1,33 @@
+{
+  "authorization": {
+    "channel": "Owner directive in Codex",
+    "approved_date": "2026-11-27",
+    "document_sha256": "55a23136904fce29bf05721b2503592b9c9e4b0a28622cba4ff82fa9511a4d16",
+    "scope": "One default Random Forest fit and one frozen Trial 16 refit. Train only, score Validation only."
+  },
+  "source_head": "af4d7893d717c7b9c33d7253152f6fe475554f2a",
+  "g3_run": "official_20261029_04",
+  "g3_manifest_sha256": "7d3d68b694b2c260cfc89087f1dd8a5cfd35784ae303803fd0687c530d412242",
+  "preprocessor_sha256": "b23a955a54e453f250b55b95e61cc0fce445a231bdc4a830de55d18f1b3e7ada",
+  "total_max_fits": 2,
+  "max_ram_mib": 2048,
+  "max_threads": 1,
+  "official_test": "SEALED",
+  "runs": {
+    "default": {
+      "run_id": "default_rf_20261127_02",
+      "max_fits": 1,
+      "max_wall_seconds": 900,
+      "params": {
+        "random_state": 42,
+        "n_jobs": 1
+      }
+    },
+    "checkpoint": {
+      "run_id": "trial16_refit_20261127_02",
+      "max_fits": 1,
+      "max_wall_seconds": 180,
+      "source_trial": 16
+    }
+  }
+}

@@ -34,6 +34,7 @@ models/
 results/runs/
 results/local/
 *.joblib
+!results/scania_aps/rf_supplement/trial16_refit_20261127_02/random_forest.joblib
 *.pkl
 *.pickle
 *.onnx
@@ -55,6 +56,10 @@ results/local/
 data/*
 !data/README.md
 !data/.gitkeep
+!data/examples/
+data/examples/*
+!data/examples/scania_validation_sample.csv
+!data/examples/sample_provenance.json
 !data/raw/
 data/raw/*
 !data/raw/scania_aps/

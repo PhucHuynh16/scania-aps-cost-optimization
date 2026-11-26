@@ -1,0 +1,35 @@
+{
+  "source": "data/raw/scania_aps/aps_failure_training_set.csv",
+  "source_sha256": "bb484302e3a3a1c8ef5e1f0129c4dc7cbd58f350867f95b575461ca21ab6b9da",
+  "partition": "Validation",
+  "selection": "First 4 pos and first 8 neg in frozen Validation membership order.",
+  "sample_sha256": "44c33f4097c91248b3757af3cdd129fcbb0dab746d061a3e12364c67a8d7cc21",
+  "data_row_positions_zero_based": [
+    51064,
+    42770,
+    54787,
+    22821,
+    29074,
+    58290,
+    18947,
+    49720,
+    38861,
+    47611,
+    43642,
+    25712
+  ],
+  "validation_positions_zero_based": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    119,
+    163,
+    173
+  ]
+}

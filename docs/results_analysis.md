@@ -123,7 +123,7 @@ $$\mathbf{C^*_{\text{G4}} = 10.230 \quad [\text{Mô hình B2 (Logistic Regressio
 - **Đỉnh tiêu thụ RAM:** `159.82` MB (nằm trong giới hạn 2048 MB).
 - **Tập Official Test (16.000 mẫu):** **NIÊM PHONG TRONG SUỐT PHASE 2 (SEALED DURING PHASE 2)** (Chỉ mở đánh giá độc lập một lần tại Gate G10 Run 003 sau khi chính sách được khóa cố định).
 
-### 8.2. So sánh chính sách khả thi tốt nhất quan sát được (Trial 16) với các đường cơ sở
+### 8.2. So sánh Trial 16 của Optuna với các đường cơ sở G4
 
 | Tiêu chí / Mô hình | B0: Majority Dummy | B1: Decision Stump (P3) | B2: Logistic Regression (P5) | **Phase 2: Random Forest + Optuna (Trial 16)** |
 |---|:---:|:---:|:---:|:---:|
@@ -169,7 +169,7 @@ $$\mathbf{C^*_{\text{G4}} = 10.230 \quad [\text{Mô hình B2 (Logistic Regressio
 
 ### 8.4. Đồ thị trực quan hóa thực nghiệm đã trích xuất
 1. **Đường cong hội tụ tối ưu hóa:** `figures/optimization/optimization_convergence.png` — Minh họa trực quan 2 bảng: Toàn cảnh chi phí so với $B_0$ (100.000) và chi tiết quá trình hội tụ qua 20 trials, trong đó chi phí khả thi tốt nhất hạ dần từ 7.840 xuống 6.330 so với mốc cơ sở $B_2$ (10.230).
-2. **Đường cong đánh đổi chi phí và năng lực xưởng:** `figures/optimization/cost_vs_capacity_tradeoff.png` — Minh họa đường quét thực nghiệm 101 điểm ngưỡng $\tau \in [0, 1]$ của Trial 16 (chính sách khả thi tốt nhất quan sát được) cùng phân bố của 20 trials trong vùng khả thi $M \le 1200$. Thể hiện rõ tính bất khả thi khi $\tau < 0.05$ ($M > 1200$) và điểm chi phí nhỏ nhất tại $\tau^* = 0.3232$.
+2. **Đường cong đánh đổi chi phí và năng lực xưởng:** `figures/optimization/cost_vs_capacity_tradeoff.png` — Minh họa đường quét thực nghiệm 101 điểm ngưỡng $\tau \in [0, 1]$ của Trial 16 (trial có chi phí thấp nhất trong 20 lượt Optuna) cùng phân bố của 20 trials trong vùng khả thi $M \le 1200$. Thể hiện rõ tính bất khả thi khi $\tau < 0.05$ ($M > 1200$) và điểm chi phí nhỏ nhất tại $\tau^* = 0.3232$.
 
 ### 8.5. Danh mục và mã băm SHA-256 các artifact chính thức (Run 002)
 Toàn bộ 12 artifacts tại `results/scania_aps/phase2/scania_phase2_rf_optuna_002/` đã được xác thực mã hóa:
@@ -230,9 +230,9 @@ Toàn bộ 12 artifacts tại `results/scania_aps/phase2/scania_phase2_rf_optuna
 
 ### 9.3. Nhận định khoa học về năng lực tổng quát hóa (Generalization Assessment)
 1. **Khả năng tổng quát hóa xuất sắc:** Khi chuyển từ phân vùng Validation sang Official Test hoàn toàn độc lập, chính sách tối ưu vẫn duy trì mức cắt giảm chi phí ấn tượng **92.62%** (từ 187.500 đơn vị chi phí mặc định xuống chỉ còn 13.840 đơn vị chi phí).
-2. **Bảo toàn tỷ lệ phát hiện hư hỏng (Recall 95.20%):** Ngăn chặn thành công 357 trên 375 sự cố chết máy dọc đường, chỉ lọt 18 trường hợp trong toàn bộ 16.000 xe.
-3. **Cải thiện độ chuẩn xác (Precision tăng từ 33.74% lên 42.45%):** Do tỷ lệ mẫu dương tính trên tập Test thực tế (2.34%) cao hơn trên Train/Validation (1.67%), mật độ dự đoán đúng tăng lên mà không làm bùng nổ số lượng False Positives.
-4. **Tuyệt đối thỏa mãn ràng buộc năng lực xưởng ($M = 841 \le 1600$):** Số lượng xe yêu cầu bảo dưỡng thực tế là 841 xe (5.26%), chỉ bằng hơn một nửa công suất tối đa cho phép của xưởng ($K = 1.600$), chứng minh tính khả thi thực tế cực kỳ vững chắc của chính sách.
+2. **Bảo toàn tỷ lệ phát hiện hư hỏng (Recall 95.20%):** Chính sách đề xuất kiểm tra đúng 357 trong số 375 mẫu có lỗi APS và bỏ sót 18 mẫu.
+3. **Cải thiện độ chuẩn xác (Precision tăng từ 33.74% lên 42.45%):** Precision là 33,74% trên Validation và 42,45% trên Official Test. Tỷ lệ mẫu lớp dương ở hai tập lần lượt là 1,67% và 2,34%.
+4. **Tuyệt đối thỏa mãn ràng buộc năng lực xưởng ($M = 841 \le 1600$):** Số lượng xe yêu cầu bảo dưỡng thực tế là 841 xe (5.26%), chỉ bằng hơn một nửa công suất tối đa cho phép của xưởng ($K = 1.600$), nên chính sách khả thi theo giới hạn benchmark của tập này.
 5. **Minh bạch hóa các lần chạy trước & Chi tiết truy cập dữ liệu Test:**
    - Run 001 (`scania_g10_official_test_001`): Tệp test CSV được giải nén và đọc vào bộ nhớ, nhưng tiến trình bị dừng ngay lập tức bởi I/O guard khi tải `tree_preprocessor.joblib`. Hoàn toàn không có dự đoán hay tinh chỉnh nào diễn ra. Lưu giữ đầy đủ tại `results/scania_aps/g10/scania_g10_official_test_001/`.
    - Run 002 (`scania_g10_official_test_002`): Tệp test CSV được đọc vào bộ nhớ, nhưng tiến trình bị dừng ngay lập tức bởi import guard `LATE_NUMERIC_IMPORT` khi unpickle `SimpleImputer`. Hoàn toàn không có dự đoán hay tinh chỉnh nào diễn ra. Lưu giữ đầy đủ tại `results/scania_aps/g10/scania_g10_official_test_002/`.
@@ -252,3 +252,15 @@ Toàn bộ 9 artifacts tại `results/scania_aps/g10/scania_g10_official_test_00
 - `task_config.json`: `d7677777c5cc65966c668bcc8fbccc2e7e036e862b69c483a19cce54654a984c`
 - `test_metrics.json`: `53e06202f6d944944b2401fb593acc81cdd6a0b12ec20cb702ed37d45522bc1a`
 - `validation_guard_metrics.json`: `0c7310e0f94ef3d1ae200e1c31090aedfde59c5aefe710df2dc67d84a709b1c3`
+
+## 10. Baseline Random Forest bổ sung trên Validation
+
+| Chính sách | Ngưỡng | Chi phí | TP | FP | FN | TN | Recall | M / K |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| RF mặc định | 0,5 | 28.190 | 144 | 19 | 56 | 11.781 | 72,00% | 163 / 1.200 |
+| RF mặc định + quét ngưỡng | 0,1 | **5.420** | 194 | 242 | 6 | 11.558 | 97,00% | 436 / 1.200 |
+| RF + Optuna, Trial 16 | 0,323244 | 6.330 | 195 | 383 | 5 | 11.417 | 97,50% | 578 / 1.200 |
+
+Trên cùng mô hình mặc định, quét ngưỡng giảm 50 FN, tăng 223 FP và dùng thêm 273 lượt kiểm tra. Chi phí giảm từ 28.190 xuống 5.420. Đây là chi phí thấp nhất trong các chính sách đã đánh giá trên Validation. So với Trial 16, RF mặc định + quét ngưỡng giảm 141 FP và 142 lượt kiểm tra, đổi lại tăng 1 FN và Recall giảm 0,50 điểm phần trăm. Mức giảm chi phí là 910 đơn vị (14,38% so với Trial 16).
+
+RF mặc định dùng `class_weight=None` và 100 cây. Trial 16 dùng `class_weight="balanced"` và 50 cây, với các siêu tham số khác cũng thay đổi. Phép so sánh giữa hai cấu hình chưa tách được ảnh hưởng riêng của Optuna. Trial 16 có chi phí thấp nhất trong 20 trial Optuna và là chính sách đã khóa trước G10. Số liệu RF mặc định hiện giới hạn ở Validation. Checkpoint được refit sau nghiệm thu để phục vụ dự đoán trực tiếp. [Kết quả RF mặc định](../results/scania_aps/rf_supplement/default_rf_20261127_02/metrics.json) · [Đối chiếu checkpoint](../results/scania_aps/rf_supplement/trial16_refit_20261127_02/metrics.json)

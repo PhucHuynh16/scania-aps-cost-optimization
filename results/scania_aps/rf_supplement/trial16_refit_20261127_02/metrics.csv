@@ -1,0 +1,2 @@
+policy,N,P,TP,FP,FN,TN,cost_fp,cost_fn,total_cost,cost_per_observation,reference_cost,absolute_saving,saving_pct,M,K,maintenance_rate,excess,excess_rate,feasible,policy_status,threshold,precision,recall,f1,roc_auc,average_precision
+trial16_frozen,12000,200,195,383,5,11417,3830,2500,6330,0.5275,100000,93670,93.67,578,1200,0.04816666666666667,0,0.0,True,FEASIBLE,0.3232440937634324,0.3373702422145329,0.975,0.5012853470437018,0.990328813559322,0.7058733219518325

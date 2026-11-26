@@ -1,0 +1,8 @@
+{
+  "run_id": "default_rf_20261127_01",
+  "status": "FAILED",
+  "fit_used": 0,
+  "wall_seconds": 5.524405799998931,
+  "peak_job_memory_bytes": 130777088,
+  "worker_exit": 1
+}

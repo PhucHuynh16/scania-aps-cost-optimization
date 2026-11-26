@@ -1,0 +1,100 @@
+{
+  "policies": {
+    "default_0_5": {
+      "N": 12000,
+      "P": 200,
+      "TP": 144,
+      "FP": 19,
+      "FN": 56,
+      "TN": 11781,
+      "cost_fp": 190,
+      "cost_fn": 28000,
+      "total_cost": 28190,
+      "cost_per_observation": 2.3491666666666666,
+      "reference_cost": 100000,
+      "absolute_saving": 71810,
+      "saving_pct": 71.81,
+      "M": 163,
+      "K": 1200,
+      "maintenance_rate": 0.013583333333333333,
+      "excess": 0,
+      "excess_rate": 0.0,
+      "feasible": true,
+      "policy_status": "FEASIBLE",
+      "threshold": 0.5,
+      "precision": 0.8834355828220859,
+      "recall": 0.72,
+      "f1": 0.7933884297520661,
+      "roc_auc": 0.9920947033898304,
+      "average_precision": 0.8958988487533939
+    },
+    "default_optimized_threshold": {
+      "N": 12000,
+      "P": 200,
+      "TP": 194,
+      "FP": 242,
+      "FN": 6,
+      "TN": 11558,
+      "cost_fp": 2420,
+      "cost_fn": 3000,
+      "total_cost": 5420,
+      "cost_per_observation": 0.45166666666666666,
+      "reference_cost": 100000,
+      "absolute_saving": 94580,
+      "saving_pct": 94.58,
+      "M": 436,
+      "K": 1200,
+      "maintenance_rate": 0.036333333333333336,
+      "excess": 0,
+      "excess_rate": 0.0,
+      "feasible": true,
+      "policy_status": "FEASIBLE",
+      "threshold": 0.1,
+      "precision": 0.44495412844036697,
+      "recall": 0.97,
+      "f1": 0.610062893081761,
+      "roc_auc": 0.9920947033898304,
+      "average_precision": 0.8958988487533939
+    }
+  },
+  "parameters": {
+    "bootstrap": true,
+    "ccp_alpha": 0.0,
+    "class_weight": null,
+    "criterion": "gini",
+    "max_depth": null,
+    "max_features": "sqrt",
+    "max_leaf_nodes": null,
+    "max_samples": null,
+    "min_impurity_decrease": 0.0,
+    "min_samples_leaf": 1,
+    "min_samples_split": 2,
+    "min_weight_fraction_leaf": 0.0,
+    "monotonic_cst": null,
+    "n_estimators": 100,
+    "n_jobs": 1,
+    "oob_score": false,
+    "random_state": 42,
+    "verbose": 0,
+    "warm_start": false
+  },
+  "validation_only": true,
+  "selected_candidate_count": 98,
+  "fit_seconds": 45.75175510000008,
+  "predict_seconds": 0.10989730000073905,
+  "native_pools": [
+    {
+      "internal_api": "openblas",
+      "threads": 1
+    },
+    {
+      "internal_api": "openblas",
+      "threads": 1
+    },
+    {
+      "internal_api": "openmp",
+      "threads": 1
+    }
+  ],
+  "verification": null
+}

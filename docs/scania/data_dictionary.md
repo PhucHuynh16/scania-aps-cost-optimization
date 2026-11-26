@@ -241,7 +241,7 @@ Nhằm bảo đảm tính trung thực khoa học và tránh ngộ nhận số l
 
 1. **Quy ước Làm tròn và Hiển thị Thống kê (Display Rounding vs Machine Precision):**
    - Các số liệu trong Bảng Từ điển ở Mục 5 (như tỷ lệ %, giá trị trung bình `mean`, giá trị cực đại `max`) được **làm tròn số thập phân** phục vụ mục đích trình bày trực quan trên Markdown.
-   - Toàn bộ tính toán trong mã nguồn kiểm toán và học máy sử dụng độ chính xác dấu phẩy động 64-bit nguyên bản (`float64`, IEEE 754). Hồ sơ chi tiết đầy đủ không làm tròn được lưu trữ tại `results/scania_aps/g2_audit/feature_profiles.json`.
+   - Toàn bộ tính toán trong mã nguồn kiểm toán và học máy sử dụng độ chính xác dấu phẩy động 64-bit nguyên bản (`float64`, IEEE 754). Hồ sơ thống kê chưa làm tròn nằm trong kho phát triển gốc. Notebook khảo sát dùng tập phát triển để tạo lại hồ sơ này. [Hồ sơ G2 tại commit gốc](https://github.com/PhucHuynh16/Predictive-maintenance-cost-optimization/blob/93d2163e8a4bf31396eaa59b3098f3f6fdb4bf82/results/scania_aps/g2_audit/feature_profiles.json)
 
 2. **Giới hạn Đối sánh Trùng lặp Exact-X (IEEE 754 Floating-Point Matching):**
    - Phép kiểm toán trùng lặp exact-X được định nghĩa là sự trùng khớp đẳng thức tuyệt đối (`==`) giữa các vector $X$ gồm các giá trị `float64` đã parse và token khuyết thiếu `None`.

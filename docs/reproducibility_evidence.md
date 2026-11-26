@@ -47,7 +47,9 @@
 
 ## 3. BẢNG TỔNG HỢP KẾT QUẢ THỰC NGHIỆM ĐÃ XÁC THỰC
 
-### 3.1. So sánh tổng quan qua các giai đoạn
+### 3.1. So sánh các kết quả lịch sử G4, Phase 2 và G10
+
+Đối chiếu bổ sung với Random Forest mặc định chỉ dùng Validation. [Phân tích baseline bổ sung](results_analysis.md#10-baseline-random-forest-bổ-sung-trên-validation)
 
 | Tiêu chí | G4 B0: Majority Dummy | G4 B1: Decision Stump | G4 B2: Logistic Regression | Phase 2: Random Forest + Optuna TPE |
 |---|:---:|:---:|:---:|:---:|

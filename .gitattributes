@@ -14,3 +14,9 @@ data/processed/** binary
 *.npz binary
 *.joblib binary
 *.zip binary
+
+# Preserve the byte-level digests of supplemental runs and the demo sample.
+results/scania_aps/rf_supplement/** -text whitespace=cr-at-eol
+data/examples/** -text whitespace=cr-at-eol
+configs/scania/rf_supplement.json text eol=lf
+scripts/run_scania_rf_supplement.py text eol=lf

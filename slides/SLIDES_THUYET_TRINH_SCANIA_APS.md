@@ -2,13 +2,13 @@
 
 **Đề tài:** Tối ưu hóa Chi phí Bảo trì Dự đoán Hệ thống Khí nén Xe tải nặng Scania APS (UCI #421)  
 **Sinh viên thực hiện:** Huỳnh Phúc (MSSV: 2474802010314) — Khoa Công nghệ Thông tin, Trường Đại học Văn Lang  
-**Kho mã nguồn:** https://github.com/PhucHuynh16/scania-aps-cost-optimization  
+**Kho mã nguồn:** [https://github.com/PhucHuynh16/scania-aps-cost-optimization](https://github.com/PhucHuynh16/scania-aps-cost-optimization)  
 **Thời lượng trình bày & demo:** 5–7 phút
 
 ---
 
 ## SLIDE 1: TỔNG QUAN ĐỀ TÀI & KẾT QUẢ CHÍNH
-- **Bài toán ứng dụng:** Hỗ trợ quyết định kiểm tra chuyên sâu hệ thống khí nén (APS) cho xe tải nặng Scania trên bộ dữ liệu công khai UCI #421 (60.000 mẫu phát triển, 16.000 mẫu Official Test, 170 cảm biến số).
+- **Bài toán ứng dụng:** Hỗ trợ quyết định kiểm tra chuyên sâu hệ thống khí nén (APS) cho xe tải nặng Scania trên bộ dữ liệu công khai UCI #421 (60.000 mẫu phát triển, 16.000 mẫu Official Test, 170 đặc trưng số).
 - **Đặc thù tối ưu hóa:**
   - Chi phí sai lầm bất đối xứng 50:1 theo chuẩn IDA 2016: bỏ sót lỗi APS ($FN$) phạt **500**, kiểm tra thừa ($FP$) phạt **10**.
   - Ràng buộc năng lực tiếp nhận của xưởng: $M = TP + FP \le \lfloor N/10 \rfloor$ ($1.200$ xe trên Validation; $1.600$ xe trên Test).
@@ -38,14 +38,14 @@
   - Chính sách có $M \le K$ là khả thi (`FEASIBLE`); nếu $M > K$ là bất khả thi (`INFEASIBLE`) và bị loại bỏ.
 - **Hai cực đánh đổi đối lập:**
   - Hạ ngưỡng $\tau \to 0$ để bắt trọn lỗi APS ($FN \to 0$) $\Rightarrow$ cảnh báo giả $FP$ tăng vọt, vượt trần công suất $M > K$ (`INFEASIBLE`).
-  - Tăng ngưỡng $\tau \to 1$ để giảm tải xưởng ($M \to 0$) $\Rightarrow$ bỏ sót nhiều ca lỗi APS, chi phí tăng vọt về mức trần B0 ($500 P$).
+  - Tại $\tau=1$, Trial 16 không đưa xe nào vào kiểm tra, bỏ sót 200 ca và có chi phí bằng B0 (100.000 đơn vị).
 
 ---
 
 ## SLIDE 4: NGƯỠNG TỶ LỆ CHI PHÍ BAYES & THUẬT TOÁN TỐI ƯU HAI TẦNG
 - **Ngưỡng Bayes lý thuyết khi không có ràng buộc công suất:**
   - Cực tiểu hóa kỳ vọng chi phí: $10(1 - P) \le 500 P \iff P \ge \tau^*_{\text{Bayes}} = 10 / 510 \approx 0,019608$.
-  - Hạn chế khi áp dụng trực tiếp: giả định xác suất hiệu chuẩn hoàn hảo và bỏ qua trần công suất $M \le K$ (với Random Forest dùng `class_weight="balanced"`, đặt $\tau = 0,0196$ làm $M > 2.300 > 1.200$, vi phạm ràng buộc).
+  - Hạn chế khi áp dụng trực tiếp: giả định xác suất hiệu chuẩn hoàn hảo và bỏ qua trần công suất $M \le K$ (trên lưới ngưỡng của Trial 16, $\tau=0{,}02$ cần 2.313 lượt, vượt trần 1.200).
 - **Giải thuật tối ưu hai tầng Phase 2 (ngân sách 20 trials tuần tự, `seed = 42`):**
   - **Tầng ngoài:** `Optuna TPESampler` đề xuất $\theta \in \Theta$, huấn luyện đúng 1 mô hình/trial trên Train 48.000 mẫu.
   - **Tầng trong:** Đánh giá vector hóa chính xác toàn bộ tập ứng viên xác suất duy nhất $T(p) = \{0, 1\} \cup \text{unique}(p_{\text{val}})$ để chọn $\tau^*$ khả thi có chi phí nhỏ nhất; đồng thời xuất lưới đều 101 điểm phục vụ vẽ đồ thị đánh đổi.
@@ -76,6 +76,8 @@
 
 - **Nhận xét:** Hạ ngưỡng từ $0,5000$ xuống $\tau = 10/510 \approx 0,0196$ giúp Logistic Regression giảm mạnh $FN$ từ 71 xuống 14 ca, thiết lập mốc chuẩn G4 là **10.230 đơn vị** ($M = 509 \le 1.200$, thời gian chạy 6,06s, đỉnh RAM 201,90 MB).
 
+- **Baseline Random Forest bổ sung:** Một fit Random Forest mặc định trên Train (class_weight=None). Chi phí Validation 28.190 tại τ=0,5, và 5.420 tại τ=0,1 (M=436). 5.420 là mức thấp nhất trên Validation, thấp hơn Trial 16 (6.330, M=578) 14,38%. Hai cấu hình khác siêu tham số và class_weight (None và balanced). Kết quả G10 tiếp tục dùng chính sách Trial 16.
+
 ---
 
 ## SLIDE 7: KẾT QUẢ TỐI ƯU HÓA PHASE 2 & ĐỘ NHẠY NGƯỠNG (TRIAL 16)
@@ -95,6 +97,7 @@
   - Kết quả: $TP = 357/375$ (Recall **95,20%**), $FP = 484$, $FN = 18$, $TN = 15.141$, Precision **42,45%**, ROC-AUC **0,9861**.
   - Tổng chi phí: **13.840 đơn vị**, tiết kiệm **92,62%** so với B0 ($187.500$), lượt xe vào xưởng $M = 841 \le 1.600$ (`FEASIBLE`).
 - **Hạn chế nghiên cứu & Minh bạch học thuật:**
-  - Tối ưu hóa chạy trên 1 hạt giống cố định (`seed = 42`), chưa tách riêng baseline RF mặc định; hàm chi phí $10 \cdot FP + 500 \cdot FN$ và trần $10\%$ là mô hình tĩnh; không lưu sẵn tệp `.joblib` của mô hình RF (demo chạy chế độ đọc kết quả lưu trữ).
+  - Thực nghiệm dùng seed 42. Chi phí và trần 10% là giả định tĩnh. Điểm RF chưa hiệu chỉnh xác suất rủi ro.
   - Ở G10 Runs 001/002 bị dừng sớm, tệp CSV Test chỉ nạp vào RAM trước khi dừng tại chốt kiểm tra preprocessor, không có dự đoán hay tinh chỉnh. Toàn bộ 32 tệp kết quả G4, Phase 2, G10 được kiểm tra toàn vẹn bằng mã băm SHA-256.
-  - Khai báo AI: Có sử dụng Codex & Antigravity hỗ trợ kiểm thử/xuất tài liệu; sinh viên tự kiểm chứng số liệu và chịu trách nhiệm 100%.
+  - Xem khai báo công cụ hỗ trợ và phần sinh viên tự kiểm chứng ở Phụ lục C của báo cáo.
+  - **Web Demo:** Cài lockfile Phase 2, chạy `python app.py` và mở [localhost:8501](http://localhost:8501). Checkpoint Trial 16 khớp Validation và dùng để dự đoán CSV, thử ngưỡng/công suất và xuất kết quả.

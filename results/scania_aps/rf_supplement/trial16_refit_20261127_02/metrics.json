@@ -1,0 +1,81 @@
+{
+  "policies": {
+    "trial16_frozen": {
+      "N": 12000,
+      "P": 200,
+      "TP": 195,
+      "FP": 383,
+      "FN": 5,
+      "TN": 11417,
+      "cost_fp": 3830,
+      "cost_fn": 2500,
+      "total_cost": 6330,
+      "cost_per_observation": 0.5275,
+      "reference_cost": 100000,
+      "absolute_saving": 93670,
+      "saving_pct": 93.67,
+      "M": 578,
+      "K": 1200,
+      "maintenance_rate": 0.04816666666666667,
+      "excess": 0,
+      "excess_rate": 0.0,
+      "feasible": true,
+      "policy_status": "FEASIBLE",
+      "threshold": 0.3232440937634324,
+      "precision": 0.3373702422145329,
+      "recall": 0.975,
+      "f1": 0.5012853470437018,
+      "roc_auc": 0.990328813559322,
+      "average_precision": 0.7058733219518325
+    }
+  },
+  "parameters": {
+    "bootstrap": true,
+    "ccp_alpha": 0.0,
+    "class_weight": "balanced",
+    "criterion": "gini",
+    "max_depth": 10,
+    "max_features": 0.4268663927182804,
+    "max_leaf_nodes": null,
+    "max_samples": null,
+    "min_impurity_decrease": 0.0,
+    "min_samples_leaf": 1,
+    "min_samples_split": 10,
+    "min_weight_fraction_leaf": 0.0,
+    "monotonic_cst": null,
+    "n_estimators": 50,
+    "n_jobs": 1,
+    "oob_score": false,
+    "random_state": 42,
+    "verbose": 0,
+    "warm_start": false
+  },
+  "validation_only": true,
+  "selected_candidate_count": 2847,
+  "fit_seconds": 36.00984339999923,
+  "predict_seconds": 0.03396969999994326,
+  "native_pools": [
+    {
+      "internal_api": "openblas",
+      "threads": 1
+    },
+    {
+      "internal_api": "openblas",
+      "threads": 1
+    },
+    {
+      "internal_api": "openmp",
+      "threads": 1
+    }
+  ],
+  "verification": {
+    "frozen_metrics_match": true,
+    "validation_guard_match": true,
+    "roc_auc_match": true,
+    "average_precision_match": true,
+    "threshold_curve_match": true,
+    "selected_threshold_match": true,
+    "historical_row_scores_available": false,
+    "status": "PASS"
+  }
+}

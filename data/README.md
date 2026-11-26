@@ -11,7 +11,7 @@ Tài liệu này mô tả nguồn gốc dữ liệu, mã băm kiểm tra toàn v
 - **Đơn vị công bố:** Scania CV AB (Södertälje, Thụy Điển) — IDA 2016 Industrial Challenge
 - **DOI:** [10.24432/C51S51](https://doi.org/10.24432/C51S51)
 - **URL chính thức:** [https://archive.ics.uci.edu/dataset/421/aps+failure+at+scania+trucks](https://archive.ics.uci.edu/dataset/421/aps+failure+at+scania+trucks)
-- **Giấy phép sử dụng:** Creative Commons Attribution 4.0 International ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/))
+- **Giấy phép theo trang UCI:** Creative Commons Attribution 4.0 International ([CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)). Tệp mô tả gốc có thông báo GNU GPL phiên bản 3 hoặc mới hơn của Scania. [Tài liệu mô tả gốc](raw/scania_aps/aps_failure_description.txt)
 
 ---
 
@@ -26,7 +26,21 @@ Tệp nén phân phối từ UCI (`https://archive.ics.uci.edu/static/public/421
 | `aps_failure_test_set.csv` | 11.905.772 | `c56ab8aa32a0f670f5e7144bf0d53c7a7ea50549c7f66a8770281eb2ba2629b3` | Tập Official Test gốc (16.000 mẫu, 171 cột — nằm trong ZIP) |
 | `aps_failure_description.txt` | 4.874 | `57b1eb3c551a678ffc1c8112e5b34c566dd16457642563f58aeb3ca65beeb820` | Tài liệu mô tả thuộc tính gốc từ Scania |
 
-*(Lưu ý kỹ thuật: SHA-256 được sử dụng làm mã băm kiểm tra tính toàn vẹn dữ liệu — integrity checksum, không phải chữ ký số khóa công khai).*
+Mục Official Test trong bảng ghi thông tin nguồn từ hồ sơ thực nghiệm. Có thể kiểm tra ZIP gốc bằng SHA-256 ngay trên tệp nén.
+
+SHA-256 của manifest thu thập và các tệp G3 tính trên toàn bộ tệp. Mã băm mảng trong manifest G3 tính trên nội dung và hình dạng mảng theo giao thức của pipeline.
+
+| Tệp | Bytes | SHA-256 |
+|---|---:|---|
+| `acquisition_manifest.json` | 1,218 | `7b5536a331dc339295ae82829a0360fce188ceaf71b0f3206a2571442c3a6c0c` |
+| `official_split.json` | 4,969,510 | `543b61e8c436c2f0f394b000e9e6ca9a8097a14b71373a8d9b2a3d3f4fd97a6b` |
+| `membership.npz` | 541,018 | `ca09b816674b54ef7976b03f87f67f920a62cf367ad98ced38071f9485f4d35f` |
+| `tree_train.npy` | 65,280,128 | `e8327b1f675292aea5dad947d0b0f8a33e6e0cac87e7aaf3e8977e607b15d9d9` |
+| `tree_validation.npy` | 16,320,128 | `e92cbd449b03f09e7447ac9172a40469f6166153cebf2264713a31bbbe83b4be` |
+| `lr_train.npy` | 65,280,128 | `118a5609ea74b0fbb126eb6ff1d62dce2f3f47caba967a1d17d3b3082145b6ab` |
+| `lr_validation.npy` | 16,320,128 | `8515910984232bcbcc7a530336b3ce86b6865727d934b162864fcb3b6fbdb2f0` |
+| `tree_preprocessor.joblib` | 3,624 | `b23a955a54e453f250b55b95e61cc0fce445a231bdc4a830de55d18f1b3e7ada` |
+| `lr_preprocessor.joblib` | 8,065 | `7e649dc75a1eda80d5409148c1ffb090b639a951a5e25cbd1027e2aedbd1f8dd` |
 
 ---
 
@@ -39,14 +53,14 @@ Tệp nén phân phối từ UCI (`https://archive.ics.uci.edu/static/public/421
 
 ### 3.2. Phân vùng kiểm thử độc lập (`aps_failure_test_set.csv` — 16.000 mẫu)
 - Gồm $375$ mẫu `pos` ($2.34\%$) và $15.625$ mẫu `neg` ($97.66\%$).
-- Không giải nén ra thư mục làm việc trong giai đoạn G3/G4/Phase 2. Chỉ được đọc trực tiếp từ tệp ZIP trong bộ nhớ tại **Gate G10 Run 003** để đánh giá độc lập một lần duy nhất với chính sách đã khóa từ Trial 16.
+- CSV nằm trong ZIP UCI. G3, G4 và Phase 2 dùng tập phát triển. **Gate G10 Run 003** là lượt duy nhất chấm điểm chính sách đã khóa từ Trial 16.
 - *Công bố minh bạch:* Trong hai lượt chạy lỗi kỹ thuật trước đó (`scania_g10_official_test_001` và `002`), tệp CSV Test đã được đọc vào bộ nhớ trước khi tiến trình dừng tại chốt kiểm tra đường dẫn/import của `tree_preprocessor.joblib`; không có dự đoán hay điều chỉnh tham số nào diễn ra.
 
 ---
 
 ## 4. QUY TRÌNH TIỀN XỬ LÝ KHÔNG RÒ RỈ (TRAIN-ONLY PREPROCESSING)
 
-1. **Đọc dữ liệu & kiểm tra schema (`src/scania/data.py`):** Bỏ qua phần lời dẫn đầu tệp, kiểm tra đúng header dòng 21 (`class` + $170$ cột số từ `aa_000` đến `ee_000`), chuyển chuỗi `na` thành `NaN`, mã hóa `neg -> 0`, `pos -> 1`.
+1. **Đọc dữ liệu & kiểm tra schema (`src/scania/data.py`):** Bỏ qua phần lời dẫn đầu tệp, kiểm tra đúng header dòng 21 (`class` + $170$ cột số từ `aa_000` đến `eg_000`), chuyển chuỗi `na` thành `NaN`, mã hóa `neg -> 0`, `pos -> 1`.
 2. **Nhánh mô hình cây (`tree_preprocessor.joblib`):** Kiểm tra hợp đồng 170 đặc trưng (`FeatureContract`) + `SimpleImputer(strategy="median")` học trung vị trên $48.000$ mẫu Train, sau đó `transform` sang `tree_train.npy` và `tree_validation.npy`.
 3. **Nhánh Logistic Regression (`lr_preprocessor.joblib`):** Bổ sung thêm `StandardScaler()` học trung bình và độ lệch chuẩn trên $48.000$ mẫu Train, xuất `lr_train.npy` và `lr_validation.npy`.
 
@@ -88,7 +102,7 @@ python scripts/run_scania_g10.py verify
 ```
 
 ### 5.2. Chế độ B — Kiểm chứng trực tiếp dữ liệu đính kèm hoặc tái tạo lại phân vùng G3
-Với dữ liệu đã có sẵn trong `data/raw/scania_aps/` và `data/processed/scania_aps/`, có thể kiểm chứng hoặc chạy tái tạo lại một lượt phân vùng G3 mới để đối chiếu `stable_digest`:
+Có thể kiểm tra SHA-256 của dữ liệu sẵn có từ repository hoặc bản ZIP. Lệnh tái tạo G3 tùy chọn cần chạy trong kho Git đầy đủ với môi trường khóa G3 vì bộ chạy ghi commit nguồn vào minh chứng:
 ```powershell
 # Kiểm tra mã băm SHA-256 của tệp ZIP gốc đính kèm
 Get-FileHash -Algorithm SHA256 "data/raw/scania_aps/aps+failure+at+scania+trucks.zip"

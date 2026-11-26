@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Scania APS | Tối ưu chi phí bảo trì</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script defer src="/dashboard.js"></script>
+    <script defer src="/live.js"></script>
+  </head>
+  <body>
+    <aside>
+      <div class="brand">
+        <span class="mark" aria-hidden="true">S</span>
+        <div>SCANIA APS<small>CHI PHÍ BẢO TRÌ</small></div>
+      </div>
+      <nav aria-label="Các mục dashboard">
+        <button data-tab="overview" class="active">Tổng quan</button
+        ><button data-tab="baseline">Baseline</button
+        ><button data-tab="optimization">Optuna TPE</button
+        ><button data-tab="threshold">Phân tích ngưỡng</button
+        ><button data-tab="test">Official Test</button
+        ><button data-tab="integrity">Kiểm chứng</button>
+        <button data-tab="live">Dự đoán CSV</button>
+      </nav>
+      <div class="side-foot">
+        UCI Dataset #421<br />Kết quả thực nghiệm đã lưu
+      </div>
+    </aside>
+    <main>
+      <header>
+        <div>
+          <h1 id="page-title">Tổng quan tối ưu hóa</h1>
+          <p id="page-sub">
+            Giảm chi phí kiểm tra hệ thống khí nén xe tải dưới giới hạn công
+            suất bảo trì.
+          </p>
+        </div>
+        <span id="status" class="status" role="status"
+          >Đang kiểm tra dữ liệu…</span
+        >
+      </header>
+      <div id="error" hidden>
+        <p id="error-message" role="alert"></p>
+        <button type="button" id="retry" class="primary">Kiểm tra lại</button>
+      </div>
+      <div id="content" hidden>
+        <section id="overview" class="page">
+          <div id="overview-kpis" class="kpis"></div>
+          <div class="split">
+            <article>
+              <h2>Bài toán tối ưu</h2>
+              <p>
+                Chọn siêu tham số Random Forest θ và ngưỡng quyết định τ để giảm
+                chi phí lỗi dự đoán.
+              </p>
+              <div id="formula" class="formula"></div>
+              <p>
+                FP: kiểm tra APS không cần thiết. FN: bỏ sót lỗi APS. Chi phí
+                tính theo đơn vị benchmark.
+              </p>
+              <div class="formula">aᵢ = 1 khi pᵢ(θ) ≥ τ, với τ ∈ [0, 1]</div>
+              <h3>Ràng buộc công suất</h3>
+              <div id="constraint" class="formula"></div>
+            </article>
+            <article>
+              <h2>Quy trình thực nghiệm</h2>
+              <div id="pipeline" class="pipeline"></div>
+              <p class="muted">
+                Mô hình học từ Train. Optuna và bước chọn ngưỡng dùng
+                Validation. Official Test đánh giá chính sách đã đóng băng.
+              </p>
+            </article>
+          </div>
+          <article>
+            <h2>Chính sách nghiên cứu đã chốt trước G10</h2>
+            <div id="decision"></div>
+          </article>
+        </section>
+        <section id="baseline" class="page" hidden>
+          <article>
+            <h2>Chi phí trên cùng tập Validation</h2>
+            <p class="muted">
+              Các chính sách G4, Random Forest mặc định và Trial 16 của Optuna.
+            </p>
+            <div id="baseline-bars"></div>
+          </article>
+          <article>
+            <h2>Bảng kết quả đầy đủ</h2>
+            <div class="table-wrap" id="baseline-table"></div>
+            <p class="note" id="baseline-comparison"></p>
+          </article>
+        </section>
+        <section id="optimization" class="page" hidden>
+          <div id="opt-kpis" class="kpis"></div>
+          <article>
+            <h2>Hội tụ tìm kiếm Optuna</h2>
+            <p class="muted">
+              Đường xanh: best-so-far. Đường xám: chi phí từng trial.
+            </p>
+            <div id="convergence-chart" class="chart"></div>
+          </article>
+          <div class="split">
+            <article>
+              <h2>Siêu tham số được chọn</h2>
+              <div id="parameters"></div>
+            </article>
+            <article>
+              <h2>Không gian tìm kiếm</h2>
+              <div id="search-space"></div>
+            </article>
+          </div>
+          <article>
+            <h2>Lịch sử trials</h2>
+            <div class="table-wrap" id="trial-table"></div>
+          </article>
+        </section>
+        <section id="threshold" class="page" hidden>
+          <article>
+            <h2>Thử thay đổi ngưỡng trên Validation</h2>
+            <p>
+              Thanh trượt chọn một trong 101 điểm Validation đã lưu. Mỗi bước
+              tương ứng với 0,01.
+            </p>
+            <div class="slider-head">
+              <label for="tau">Ngưỡng τ</label
+              ><output id="tau-value" for="tau"></output>
+            </div>
+            <input
+              id="tau"
+              type="range"
+              min="0"
+              max="100"
+              step="1"
+              value="32"
+            />
+            <div class="range-label">
+              <span>0.00</span><span>0.50</span><span>1.00</span>
+            </div>
+            <div id="threshold-kpis" class="kpis threshold-kpis"></div>
+            <div id="threshold-counts" class="table-wrap"></div>
+            <div id="feasibility" class="note" role="status"></div>
+          </article>
+          <div class="split">
+            <article>
+              <h2>Chi phí theo ngưỡng</h2>
+              <div id="cost-chart" class="chart"></div>
+            </article>
+            <article>
+              <h2>Công suất theo ngưỡng</h2>
+              <div id="capacity-chart" class="chart"></div>
+            </article>
+          </div>
+          <article>
+            <h2>Nghiệm đóng băng và lưới trực quan</h2>
+            <p id="exact-policy"></p>
+            <p class="muted">
+              Nghiệm thật được chọn trên tập ngưỡng xác suất duy nhất. Lưới
+              0.00–1.00 chỉ dùng để phân tích độ nhạy.
+            </p>
+          </article>
+        </section>
+        <section id="test" class="page" hidden>
+          <div id="test-kpis" class="kpis"></div>
+          <div class="split">
+            <article>
+              <h2>Ma trận nhầm lẫn</h2>
+              <div class="table-wrap" id="matrix"></div>
+            </article>
+            <article>
+              <h2>Chỉ số đánh giá</h2>
+              <div id="test-metrics"></div>
+            </article>
+          </div>
+          <article>
+            <h2>Đánh giá chính sách đã đóng băng</h2>
+            <p id="test-policy"></p>
+            <p class="note">
+              Bảng dùng chỉ số Official Test đã lưu từ lượt G10 Run 003.
+            </p>
+          </article>
+        </section>
+        <section id="integrity" class="page" hidden>
+          <article>
+            <h2>Tính toàn vẹn của bằng chứng</h2>
+            <div id="integrity-groups"></div>
+            <button id="recheck" class="primary">
+              Kiểm tra lại mã băm và số liệu
+            </button>
+            <p id="check-result" role="status"></p>
+          </article>
+          <article>
+            <h2>Nguồn số liệu</h2>
+            <div id="sources"></div>
+          </article>
+          <div class="split">
+            <article>
+              <h2>Đồ thị hội tụ gốc</h2>
+              <img src="/figures/convergence.png" alt="Biểu đồ hội tụ gốc" />
+            </article>
+            <article>
+              <h2>Đồ thị trade-off gốc</h2>
+              <img
+                src="/figures/tradeoff.png"
+                alt="Biểu đồ đánh đổi chi phí và công suất gốc"
+              />
+            </article>
+          </div>
+        </section>
+        <section id="live" class="page" hidden>
+          <article>
+            <h2>Live Prediction từ CSV</h2>
+            <p>
+              Chọn CSV UTF-8 có 170 thuộc tính theo thứ tự của mẫu, thêm cột
+              <code>class</code> nếu có nhãn <code>pos</code> hoặc
+              <code>neg</code>. Giới hạn 4 MiB và 1.000 dòng.
+            </p>
+            <div class="live-controls">
+              <label for="live-file"
+                >Tệp CSV
+                <input id="live-file" type="file" accept=".csv,text/csv"
+              /></label>
+              <button class="primary" id="live-upload" type="button">
+                Dự đoán CSV
+              </button>
+              <button class="primary" id="live-sample" type="button">
+                Chạy CSV mẫu Validation
+              </button>
+              <a
+                href="/validation-sample.csv"
+                download="scania_validation_sample.csv"
+                >Tải CSV mẫu</a
+              >
+            </div>
+            <p class="muted">
+              Mẫu lấy từ Validation đã dùng trong nghiên cứu. Điểm RF chưa được
+              hiệu chỉnh thành xác suất rủi ro thực tế. Nhãn neg chỉ nhóm lỗi
+              ngoài APS.
+            </p>
+            <p id="live-status" role="status"></p>
+          </article>
+          <article>
+            <h2>Quyết định bảo trì</h2>
+            <div class="live-controls">
+              <label for="live-threshold"
+                >Ngưỡng quyết định
+                <input
+                  id="live-threshold"
+                  type="number"
+                  min="0"
+                  max="1"
+                  step="any"
+              /></label>
+              <label for="live-mode"
+                >Đơn vị công suất
+                <select id="live-mode">
+                  <option value="percent">Phần trăm</option>
+                  <option value="count">Số lượt kiểm tra</option>
+                </select></label
+              >
+              <label for="live-capacity"
+                >Giới hạn công suất
+                <input
+                  id="live-capacity"
+                  type="number"
+                  value="10"
+                  min="0"
+                  max="100"
+                  step="0.01"
+              /></label>
+              <label class="live-check"
+                ><input id="live-prioritize" type="checkbox" /> Ưu tiên tối đa K
+                lượt khi vượt trần</label
+              >
+            </div>
+            <p class="muted">
+              Theo phần trăm, K được làm tròn xuống. Khi bật ưu tiên, các dòng
+              qua ngưỡng được xếp theo điểm giảm dần rồi theo thứ tự CSV nếu
+              đồng điểm. Đây là chính sách bổ sung của lô hiện tại.
+            </p>
+            <p
+              id="live-decision-error"
+              class="note bad"
+              role="alert"
+              hidden
+            ></p>
+            <div id="live-result" hidden>
+              <div id="live-stats"></div>
+              <p id="live-feasible" class="note" role="status"></p>
+              <h3>Chi phí và ma trận nhầm lẫn của lô</h3>
+              <p id="live-label-info"></p>
+              <div class="table-wrap"><table id="live-metrics"></table></div>
+              <div class="table-wrap"><table id="live-matrix"></table></div>
+              <h3>Kết quả từng dòng</h3>
+              <div class="table-wrap live-table">
+                <table id="live-rows">
+                  <thead>
+                    <tr>
+                      <th scope="col">Dòng</th>
+                      <th scope="col">Điểm APS positive</th>
+                      <th scope="col">Theo ngưỡng</th>
+                      <th scope="col">Sau ưu tiên</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <button class="primary" id="live-export" type="button" disabled>
+                Xuất CSV kết quả
+              </button>
+            </div>
+          </article>
+        </section>
+      </div>
+      <footer>Scania APS · Nhập môn Tối ưu hóa</footer>
+    </main>
+  </body>
+</html>

@@ -1,9 +1,9 @@
-# BÁO CÁO BÀI TẬP LỚN: TỐI ƯU HÓA CHI PHÍ BẢO TRÌ DỰ ĐOÁN HỆ THỐNG KHÍ NÉN XE TẢI NẶNG SCANIA APS (UCI 421)
+# Tối ưu hóa chi phí bảo trì dự đoán hệ thống khí nén xe tải Scania
 
 **Học phần:** Nhập môn Tối ưu hóa — Học kỳ 1, Năm học 2026–2027  
 **Đơn vị đào tạo:** Khoa Công nghệ Thông tin — Trường Đại học Văn Lang  
 **Sinh viên thực hiện:** Huỳnh Phúc (MSSV: 2474802010314)  
-**Kho mã nguồn GitHub:** https://github.com/PhucHuynh16/scania-aps-cost-optimization  
+**Kho mã nguồn GitHub:** [https://github.com/PhucHuynh16/scania-aps-cost-optimization](https://github.com/PhucHuynh16/scania-aps-cost-optimization)  
 **Tập dữ liệu nghiên cứu:** *APS Failure at Scania Trucks* — UCI Machine Learning Repository #421 (Scania CV AB, 2016)
 
 ---
@@ -26,7 +26,7 @@ Theo tài liệu gốc của Scania CV AB (IDA 2016 Industrial Challenge), bộ 
 - **Lớp dương (`pos`, $y = 1$):** Xe gặp sự cố xuất phát từ một bộ phận cụ thể thuộc hệ thống khí nén APS (chiếm 1.000/60.000 mẫu, tương đương 1,67% trong tập phát triển; và 375/16.000 mẫu, tương đương 2,34% trong tập Official Test).
 - **Lớp âm (`neg`, $y = 0$):** Xe vào xưởng do hư hỏng ở **các bộ phận khác không liên quan đến APS** (như động cơ, hệ thống điện hoặc truyền động), không phải là xe hoàn toàn khỏe mạnh.
 
-Mỗi quan sát gồm 170 thuộc tính cảm biến số đã được ẩn danh tên vật lý (ký hiệu từ `aa_000` đến `ee_000`, bao gồm cả các bộ đếm đơn lẻ và các bin tần suất dạng histogram) với tỷ lệ khuyết thiếu giá trị (`na`) đáng kể ở nhiều cột.
+Mỗi quan sát gồm 170 thuộc tính cảm biến số đã được ẩn danh tên vật lý (ký hiệu từ `aa_000` đến `eg_000`, bao gồm cả các bộ đếm đơn lẻ và các bin tần suất dạng histogram) với tỷ lệ khuyết thiếu giá trị (`na`) đáng kể ở nhiều cột.
 
 ### 1.3. Mục tiêu và câu hỏi tối ưu hóa
 Nghiên cứu chuyển bài toán phân loại nhị phân mất cân bằng thành bài toán ra quyết định tối ưu có ràng buộc tài nguyên, nhằm trả lời câu hỏi trung tâm: *Với dữ liệu cảm biến lịch sử và giới hạn xưởng chỉ tiếp nhận kiểm tra chuyên sâu APS tối đa cho 10% số lượt xe, cần lựa chọn bộ siêu tham số mô hình học máy $\theta$ và ngưỡng xác suất hành động $\tau$ như thế nào để cực tiểu hóa tổng chi phí sai lầm benchmark mà không vi phạm trần công suất xưởng, đồng thời vẫn duy trì hiệu quả khi kiểm tra độc lập trên tập Official Test?*
@@ -67,7 +67,7 @@ Cụ thể, $K_{\text{val}} = \lfloor 12.000 / 10 \rfloor = 1.200$ lượt xe tr
 $$\min_{\theta \in \Theta,\; \tau \in [0, 1]} \; f(\theta, \tau) = 10 \cdot FP(\theta, \tau) + 500 \cdot FN(\theta, \tau) \quad \text{sao cho} \quad g(\theta, \tau) = TP(\theta, \tau) + FP(\theta, \tau) - 1.200 \le 0$$
 
 ### 2.4. Mối liên hệ với ngưỡng tỷ lệ chi phí Bayes không ràng buộc
-Trong lý thuyết quyết định Bayes không có ràng buộc công suất và giả sử xác suất hậu nghiệm $P(y = 1 \mid x)$ được hiệu chuẩn hoàn hảo, hành động kiểm tra $a = 1$ có kỳ vọng chi phí thấp hơn $a = 0$ khi $10(1 - p) \le 500 p$, tương đương $p \ge \tau^*_{\text{Bayes}} = \frac{10}{510} \approx 0.019608$. Tuy nhiên, khi xác suất dự báo chưa hiệu chuẩn tuyệt đối (đặc biệt khi dùng `class_weight = "balanced"` khiến phân phối điểm xác suất dịch chuyển lên cao) hoặc khi ràng buộc $M \le K$ trở nên chặt, ngưỡng cố định $10/510$ có thể đẩy $M$ vượt quá $K$. Do đó, việc tối ưu đồng thời $(\theta, \tau)$ trực tiếp dưới ràng buộc $M \le K$ là cần thiết.
+Trong bài toán không giới hạn công suất, nếu điểm $p$ là xác suất đã hiệu chuẩn, kiểm tra có chi phí kỳ vọng thấp hơn hoặc bằng bỏ qua khi $10(1-p)\le500p$, tức $p\ge10/510\approx0{,}019608$. Khi có giới hạn công suất, cần kiểm tra tính khả thi của ngưỡng này. Ở Trial 16, điểm lưới gần nhất $0{,}02$ đòi hỏi 2.313 lượt kiểm tra, vượt trần 1.200.
 
 ---
 
@@ -77,7 +77,7 @@ Trong lý thuyết quyết định Bayes không có ràng buộc công suất v�
 Ba mô hình đường cơ sở được cài đặt tại `src/scania/baselines.py` và cấu hình khóa tại `configs/scania/g4_baselines.json`:
 1. **B0 — Majority Dummy:** Chính sách phản ứng thụ động $a_i = 0, \forall i$ (không đưa xe nào vào kiểm tra APS). Chi phí tham chiếu của B0 bằng $500 P$ ($100.000$ đơn vị trên Validation; $187.500$ đơn vị trên Official Test).
 2. **B1 — Decision Stump:** Cây quyết định một tầng `DecisionTreeClassifier(max_depth=1, random_state=42)` huấn luyện trên tập Train đã điền khuyết trung vị, chấm tại hai ngưỡng cố định: ngưỡng mặc định $\tau = 0.5000$ (chính sách chính) và ngưỡng tỷ lệ chi phí Bayes $\tau = 10/510 \approx 0.0196$ (chính sách phụ).
-3. **B2 — Logistic Regression:** Hồi quy tuyến tính `LogisticRegression(C=1.0, solver="lbfgs", max_iter=2000, random_state=42)` huấn luyện trên tập Train đã điền khuyết trung vị và chuẩn hóa `StandardScaler`, chấm tại cùng hai ngưỡng cố định $\tau = 0.5000$ và $\tau = 10/510 \approx 0.0196$.
+3. **B2 — Logistic Regression:** Hồi quy logistic `LogisticRegression(C=1.0, solver="lbfgs", max_iter=2000, random_state=42)` huấn luyện trên tập Train đã điền khuyết trung vị và chuẩn hóa `StandardScaler`, chấm tại cùng hai ngưỡng cố định $\tau = 0.5000$ và $\tau = 10/510 \approx 0.0196$.
 
 ### 3.2. Phương pháp tối ưu hóa chính (Phase 2: Random Forest + Optuna TPE hai tầng)
 Phương pháp tối ưu hóa chính (`src/scania/phase2_optimization.py`) giải bài toán hai tầng lồng nhau trong ngân sách 20 lượt đánh giá mô hình:
@@ -92,13 +92,13 @@ Phương pháp tối ưu hóa chính (`src/scania/phase2_optimization.py`) giả
 ## 4. DỮ LIỆU & THIẾT KẾ THỰC NGHIỆM
 
 ### 4.1. Nguồn gốc dữ liệu, bản quyền và kiểm tra toàn vẹn
-Dữ liệu gốc tải từ UCI Machine Learning Repository #421 (DOI: `10.24432/C51S51`, giấy phép Creative Commons Attribution 4.0 — CC BY 4.0). Tệp nén gốc `aps+failure+at+scania+trucks.zip` (56.618.034 bytes) có mã băm kiểm tra toàn vẹn SHA-256 là `5504d0402f54faaf97ac0ca085a621645763f5cfea2eb29c592b057d43d4db89`; tệp huấn luyện `aps_failure_training_set.csv` (44.669.194 bytes) có mã băm SHA-256 là `bb484302e3a3a1c8ef5e1f0129c4dc7cbd58f350867f95b575461ca21ab6b9da`.
+Dữ liệu do Scania CV AB công bố qua UCI #421 (DOI [10.24432/C51S51](https://doi.org/10.24432/C51S51)). Trang UCI ghi giấy phép CC BY 4.0. Tài liệu mô tả đi kèm bản phân phối ghi thông báo GPLv3 hoặc mới hơn của Scania. Kho nộp bài có ZIP gốc, CSV phát triển, manifest thu thập và dữ liệu Train/Validation đã tiền xử lý. Kích thước và mã băm SHA-256 được ghi tại [data/README.md](../data/README.md).
 
 ### 4.2. Phân vùng dữ liệu và quy trình tiền xử lý chống rò rỉ (Giao thức G3)
 Theo pipeline G3 (`scripts/run_scania_pipeline.py`, mã băm đối tượng ổn định `efe781b7e564073a2a764e70a41cfe5c3e8975d33cc38b0fa297ef09f51767bb`):
 - **Phân vùng Train (48.000 mẫu — 80%):** Gồm 800 ca `pos` (1,67%) và 47.200 ca `neg` (98,33%). Bộ tiền xử lý nhánh cây (`SimpleImputer(strategy="median")`) và nhánh tuyến tính (`SimpleImputer(strategy="median")` + `StandardScaler()`) chỉ được `fit` trên 48.000 mẫu Train này.
 - **Phân vùng Validation (12.000 mẫu — 20%):** Gồm 200 ca `pos` (1,67%) và 11.800 ca `neg` (98,33%), tách phân tầng với `seed = 42`, rời nhau hoàn toàn với Train. Chỉ áp dụng phép biến đổi tĩnh `transform` từ bộ tiền xử lý đã học trên Train.
-- **Phân vùng Official Test (16.000 mẫu):** Gồm 375 ca `pos` (2,34%) và 15.625 ca `neg` (97,66%). Giữ nguyên trong tệp nén, bị chặn truy cập bằng I/O guard trong suốt G3, G4 và Phase 2; chỉ được đọc và biến đổi bằng `tree_preprocessor.joblib` đã khóa để đánh giá một lần tại Gate G10 Run 003.
+- **Official Test (16.000 mẫu)** có 375 ca pos (2,34%) và 15.625 ca neg (97,66%). CSV nằm trong ZIP gốc và được giữ ngoài quá trình phát triển. G10 Run 003 là lượt duy nhất có kết quả chấm điểm. Hai lần đọc trước đó dừng do lỗi kỹ thuật như mô tả ở Mục 6.2.
 
 ### 4.3. Môi trường tính toán và giám sát tài nguyên
 Thực nghiệm chạy trên hệ điều hành Windows 11 x64, Python `3.11.9`, với các phiên bản thư viện khóa tại `configs/scania/phase2_requirements.lock.txt`: `numpy==2.4.6`, `scipy==1.17.1`, `scikit-learn==1.9.1`, `optuna==5.0.0`, `joblib==1.6.0`, `threadpoolctl==3.7.0`. Mọi tiến trình thực nghiệm thật đều khởi chạy bên trong **Windows Job Object** với giới hạn cứng: `1` luồng tính toán bản địa (`OMP_NUM_THREADS=1`, `OPENBLAS_NUM_THREADS=1`, kiểm tra qua `NativeSession`), trần bộ nhớ `2048 MB`, và giới hạn thời gian `900 giây` cho Phase 2 (`180 giây` cho Gate G10).
@@ -160,7 +160,7 @@ Chính sách tốt nhất quan sát được tại Trial 16 ($n_{\text{estimator
 | Số ca lỗi APS thực tế ($P$) | 375 (2,34%) | 200 (1,67%) | **375 (2,34%)** |
 | True Positives (TP) / False Positives (FP) | 0 / 0 | 195 / 383 | **357 / 484** |
 | False Negatives (FN) / True Negatives (TN) | 375 / 15.625 | 5 / 11.417 | **18 / 15.141** |
-| Độ nhạy (Recall) / Độ chính xác (Precision) | 0,00% / N/A | 97,50% / 33,74% | **95,20% / 42,45%** |
+| Độ nhạy (Recall) / Precision | 0,00% / N/A | 97,50% / 33,74% | **95,20% / 42,45%** |
 | Độ đặc hiệu (Specificity) / F1-Score | 100,00% / 0,0000 | 96,75% / 0,5013 | **96,90% / 0,5872** |
 | ROC-AUC / PR-AUC | N/A | 0,9903 / 0,7059 | **0,9861 / 0,7495** |
 | Chi phí thành phần ($10 \cdot FP$ + $500 \cdot FN$) | 0 + 187.500 | 3.830 + 2.500 | **4.840 + 9.000** |
@@ -185,21 +185,21 @@ Bảng dưới đây trích xuất các điểm đặc trưng từ đường con
 | Khả thi ($M \le 1200$) | Không | Có | Có | Có | Có | Có | **Có** | Có | Có | Có | Có |
 
 Từ dữ liệu thực nghiệm trên, rút ra ba nhận xét quan trọng:
-1. **Ranh giới vi phạm công suất xưởng nằm giữa $\tau = 0,04$ và $\tau = 0,05$:** Do Random Forest sử dụng `class_weight = "balanced"`, điểm xác suất dự báo của lớp thiểu số được đẩy cao hơn xác suất tiên nghiệm. Nếu áp dụng ngưỡng lý thuyết Bayes $\tau \approx 0,0196$ cho mô hình này, số xe kiểm tra vượt quá 2.300 xe (`INFEASIBLE`). Trên lưới 101 điểm, chỉ các mức $\tau \le 0,04$ mới vi phạm trần $1.200$ xe ($\tau = 0,04$ có $M = 1.314$), trong khi từ $\tau = 0,05$ ($M = 1.195$) và $\tau = 0,09$ ($M = 955$) trở lên chính sách đã hoàn toàn khả thi.
+1. **Ranh giới khả thi trên lưới.** Ngưỡng $0{,}02$ cần 2.313 lượt kiểm tra và ngưỡng $0{,}04$ cần 1.314 lượt, đều vượt trần 1.200. Từ $0{,}05$ (1.195 lượt) trở đi, các ngưỡng trên lưới thỏa ràng buộc.
 2. **Vùng chi phí thấp $\tau \in [0,20; 0,32]$:** Trong khoảng này, số ca bỏ sót $FN$ chỉ dao động từ 4 đến 5 ca trong khi $FP$ giảm đều từ 505 xuống 385, giữ tổng chi phí trong dải $[6.350; 7.050]$ và đạt cực tiểu quan sát được $6.330$ tại ngưỡng ứng viên xác suất chính xác $\tau^* = 0,323244$.
 3. **Độ nhạy bất đối xứng sắc nét khi $\tau \ge 0,33$:** Chỉ cần tăng nhẹ ngưỡng từ $0,3232$ lên $0,33$, mô hình bỏ sót thêm 2 xe hỏng APS ($FN$ tăng từ 5 lên 7, cộng thêm $1.000$ đơn vị phạt), làm tổng chi phí nhảy vọt lên $7.290$, tiếp tục tăng lên $8.230$ ($\tau = 0,34$) và $8.670$ ($\tau = 0,35$). Vì vậy, phía bên phải của $\tau^*$ không phẳng mà rất nhạy với sai số ước lượng xác suất.
 
 ### 6.2. Phân tích các trường hợp chạy lỗi kỹ thuật được bảo lưu
-Theo đúng nguyên tắc lưu vết trung thực của học phần, toàn bộ các lượt chạy gặp lỗi kỹ thuật đều được giữ nguyên trong `results/scania_aps/`:
-- `scania_g4_b2_real_001`: Dừng ở bước tiền kiểm tra môi trường do thiếu gói `pytest` khi gọi nhầm trình thông dịch Python hệ thống (0 lượt fit).
-- `scania_phase2_rf_optuna_001`: Hoàn thành 9/20 trials hợp lệ thì chạm giới hạn thời gian ban đầu 300 giây; nhờ cơ chế lưu bền vững từng trial, cấu hình Run 002 đã nâng trần thời gian lên 900 giây theo phê duyệt của Chủ dự án và hoàn tất trọn vẹn 20/20 trials.
-- `scania_g10_official_test_001` và `002`: Tệp CSV Official Test đã được giải nén đọc vào bộ nhớ RAM nhưng tiến trình dừng ngay tại chốt kiểm tra danh sách cho phép (`allowlist`) và chốt chặn nạp muộn thư viện (`LATE_NUMERIC_IMPORT`) khi tải `tree_preprocessor.joblib`. Tuyệt đối không có phép biến đổi hoàn chỉnh, dự đoán xác suất hay điều chỉnh tham số nào diễn ra trên tập Test trong hai lượt lỗi này.
+Các lượt chạy dừng sớm giúp giải thích giới hạn thời gian và cách dùng Official Test. Các lượt G4 và Phase 2 có minh chứng trong thư mục [results/scania_aps](../results/scania_aps/). Hai lượt G10 gặp lỗi được lưu trong hồ sơ phát triển.
+- G4 Run 001 dừng ở bước kiểm tra môi trường do thiếu metadata của pytest. Lượt chạy ghi nhận 0 lần fit.
+- Phase 2 Run 001 chạm giới hạn 300 giây sau 11 lần fit hoàn tất và một lần fit bị ngắt. Run 002 dùng giới hạn 900 giây và lưu đủ 20 kết quả trial.
+- G10 Run 001 và 002 đã đọc CSV Official Test vào bộ nhớ rồi dừng tại bước kiểm tra bộ tiền xử lý hoặc nạp thư viện. Cả hai lượt đều dừng trước dự đoán và chấm điểm. Chính sách Trial 16 giữ nguyên.
 
 ### 6.3. Hạn chế của nghiên cứu (Limitations)
 1. **Thực nghiệm đơn hạt giống (`seed = 42`):** Bộ tối ưu hóa Optuna TPE và mô hình Random Forest trong Phase 2 mới được thực thi với một hạt giống ngẫu nhiên cố định (`seed = 42`) và ngân sách 20 trials; chưa thực hiện lặp lại trên nhiều hạt giống độc lập để báo cáo trung bình và độ lệch chuẩn (`mean ± std`), đồng thời nghiệm Trial 16 chỉ là nghiệm khả thi tốt nhất quan sát được trong 20 trials chứ không phải nghiệm tối ưu toàn cục được chứng minh toán học.
-2. **Chênh lệch ngân sách tính toán và thiếu baseline Random Forest mặc định:** Các baseline G4 (Decision Stump, Logistic Regression) chỉ chạy 2 lượt `fit` (`1,42s`) ở hai ngưỡng cố định mà không quét ngưỡng tối ưu trên Validation, đồng thời nghiên cứu chưa tách riêng một baseline `RandomForestClassifier` cấu hình mặc định chưa qua Optuna. Do đó, mức cải thiện 38,12% so với B2 là kết quả kết hợp của việc thay đổi họ mô hình phi tuyến, tìm kiếm siêu tham số TPE và tối ưu ngưỡng có ràng buộc.
+2. Baseline và ngân sách so sánh. Random Forest mặc định đã được bổ sung với một lượt fit và hai cách chọn ngưỡng trên cùng Validation (Phụ lục D). Cấu hình này và Trial 16 khác cả trọng số lớp và siêu tham số. So sánh G4 với Phase 2 còn khác họ mô hình và ngân sách fit.
 3. **Khoảng cách giữa mô hình benchmark tĩnh và vận hành thực tế:** Hàm chi phí $10 \cdot FP + 500 \cdot FN$ và trần công suất $10\%$ là mô hình tĩnh trên các bản ghi ẩn danh (không có mã định danh từng xe hay dấu thời gian liên tục), chưa phản ánh chi phí phụ tùng, ca kíp nhân công hay điều độ hàng đợi động tại trạm bảo dưỡng.
-4. **Không lưu trữ sẵn tệp trọng số mô hình `.joblib` và tiến trình Git thực tế:** Dự án lưu đầy đủ cấu hình, ngưỡng và mã băm SHA-256 kiểm tra toàn vẹn cho toàn bộ kết quả nhưng không xuất tệp `.joblib` của mô hình Random Forest ra đĩa (muốn suy luận trên dữ liệu mới cần chạy 1 bước huấn luyện lại từ cấu hình đóng băng). Về lịch sử phát triển, kho Git được khởi tạo ngày `21/10/2026` (tuần đầu khảo sát bộ dữ liệu mẫu AI4I trước khi chuyển sang bộ dữ liệu Scania APS UCI #421 từ ngày `25/10/2026`) và triển khai tập trung qua chuỗi cổng kiểm định G1–G10.
+4. Mô hình đã huấn luyện và lịch sử phát triển. Checkpoint Trial 16 được refit sau nghiệm thu để dự đoán CSV. Kết quả G10 thuộc lượt đánh giá lịch sử. Bản công bố có lịch sử Git riêng, với các mốc dẫn về kho phát triển tại docs/DEVELOPMENT_HISTORY.md.
 
 ---
 
@@ -207,7 +207,7 @@ Theo đúng nguyên tắc lưu vết trung thực của học phần, toàn bộ
 
 Nghiên cứu đã hoàn thành chuỗi quy trình tối ưu hóa ứng dụng từ phát biểu bài toán công nghiệp, lập mô hình toán học có ràng buộc, xây dựng đường cơ sở, cài đặt thuật toán tối ưu hóa hai tầng đến kiểm định độc lập trên tập Official Test:
 1. **Nghiệm và cấu hình được chọn cuối cùng:** Bộ siêu tham số `RandomForestClassifier` tại **Trial 16** (`n_estimators = 50`, `max_depth = 10`, `min_samples_split = 10`, `max_features = 0,426866`, `class_weight = "balanced"`, `random_state = 42`) kết hợp ngưỡng quyết định đóng băng **$\tau^* = 0,3232440937634324$**.
-2. **Căn cứ lựa chọn bằng số liệu:** Trên tập Validation 12.000 mẫu, cấu hình này đạt chi phí thấp nhất trong 20 trials là **6.330 đơn vị** (giảm 38,12% so với baseline tốt nhất Logistic Regression 10.230 đơn vị), bắt đúng 195/200 ca lỗi APS (Recall 97,50%) và chỉ sử dụng 578/1.200 lượt công suất xưởng. Trên tập Official Test độc lập 16.000 mẫu (Gate G10), chính sách đóng băng đạt chi phí **13.840 đơn vị** (tiết kiệm **92,62%** so với không can thiệp), Recall đạt **95,20%** (357/375 ca lỗi) và sử dụng **841/1.600** lượt công suất xưởng.
+2. **Căn cứ lựa chọn bằng số liệu:** Trên tập Validation 12.000 mẫu, cấu hình này đạt chi phí thấp nhất trong 20 trials là **6.330 đơn vị** (giảm 38,12% so với mốc G4 tốt nhất là Logistic Regression 10.230 đơn vị), bắt đúng 195/200 ca lỗi APS (Recall 97,50%) và chỉ sử dụng 578/1.200 lượt công suất xưởng. Trên tập Official Test độc lập 16.000 mẫu (Gate G10), chính sách đóng băng đạt chi phí **13.840 đơn vị** (tiết kiệm **92,62%** so với không can thiệp), Recall đạt **95,20%** (357/375 ca lỗi) và sử dụng **841/1.600** lượt công suất xưởng. Baseline bổ sung ghi nhận 5.420 trên cùng Validation (Phụ lục D). Trial 16 vẫn là nghiệm chính thức dùng cho G10.
 3. **Điều kiện áp dụng:** Chính sách phù hợp làm bộ lọc hỗ trợ quyết định sơ cấp khi phân phối dữ liệu cảm biến đầu vào tương thích với quy trình thu thập của Scania UCI #421 và tỷ lệ chi phí bỏ sót lỗi cao gấp nhiều lần chi phí kiểm tra tại xưởng; khi triển khai thực tế cần hiệu chuẩn lại theo đơn giá bảo dưỡng và năng lực xưởng theo từng ca làm việc.
 
 ---
@@ -224,12 +224,37 @@ Nghiên cứu đã hoàn thành chuỗi quy trình tối ưu hóa ứng dụng t
 3. **Đầu ra:** Nghiệm khả thi có chi phí thấp nhất $(\theta^*, \tau^*)$ qua 20 trials, được kiểm tra toàn vẹn bằng mã băm SHA-256 trước khi khóa cho bước đánh giá độc lập Gate G10.
 
 ### Phụ lục B. Liên kết kho mã nguồn & Lệnh kiểm tra nhanh
-- **GitHub Repository:** https://github.com/PhucHuynh16/scania-aps-cost-optimization
+- **GitHub Repository:** [https://github.com/PhucHuynh16/scania-aps-cost-optimization](https://github.com/PhucHuynh16/scania-aps-cost-optimization)
 - **Lệnh trình diễn kết quả đã lưu và kiểm tra mã băm toàn vẹn SHA-256 (Read-Only):**
   - `python scripts/demo.py` (trình bày đầy đủ kết quả, kiểm định nhất quán toán học và mã băm SHA-256 của 32 tệp kết quả).
   - `python scripts/demo.py --verify` (kiểm tra độc lập mã băm toàn vẹn SHA-256, trả mã thoát khác 0 nếu thiếu hoặc sai lệch dữ liệu).
+
+- Web Demo · Cài lockfile Phase 2, chạy python app.py và mở http://localhost:8501. Mục Dự đoán CSV dùng checkpoint đã kiểm chứng và cho phép đặt giới hạn công suất.
+- **Kiểm chứng Web Demo:** `python app.py --verify` kiểm tra dữ liệu trước khi mở trình duyệt.
 
 ### Phụ lục C. Khai báo công cụ hỗ trợ AI (AI Assistance Disclosure)
 Thực hiện quy định tại Mục 10 của Đề bài tập lớn cá nhân (`DE_BAI_TAP_LON_CA_NHAN_5_TUAN_GITHUB_PORTFOLIO.pdf`):
 - **Công cụ AI đã sử dụng:** Sinh viên có sử dụng công cụ trợ lý AI (Codex và Google Antigravity) để hỗ trợ lập trình khung điều phối tiến trình con an toàn (Windows Job Object, I/O guard), viết các bài kiểm thử đơn vị tự động (`pytest`), tạo script xuất biểu đồ/tài liệu báo cáo và đối soát lỗi trình bày.
 - **Phần sinh viên tự thực hiện, kiểm chứng và chịu trách nhiệm hoàn toàn:** Xác lập mô hình toán học (biến quyết định, hàm mục tiêu $10 \cdot FP + 500 \cdot FN$, ràng buộc công suất $M \le K$), giải thích đúng ngữ nghĩa nhãn `pos`/`neg` từ tài liệu gốc UCI #421, kiểm soát quy trình chống rò rỉ dữ liệu Test, trực tiếp đối chiếu từng con số trong bảng/biểu đồ với các tệp kết quả JSON/CSV gốc và chịu trách nhiệm toàn diện về nội dung báo cáo cũng như phần bảo vệ cá nhân.
+
+### Phụ lục D. Random Forest mặc định và checkpoint bổ sung
+
+Thực nghiệm bổ sung dùng cùng Train 48.000 và Validation 12.000 của G3, seed 42 và một luồng. Random Forest mặc định có 100 cây và class_weight=None. Cả hai ngưỡng của baseline dùng cùng một fit. Ngưỡng 0,1 được chọn bằng quy tắc P02 như Phase 2.
+
+| Chính sách | TP | FP | FN | TN | Chi phí | M/K |
+|---|---:|---:|---:|---:|---:|---:|
+| RF mặc định · τ=0,5 | 144 | 19 | 56 | 11.781 | 28.190 | 163/1.200 |
+| RF mặc định · τ=0,1 | 194 | 242 | 6 | 11.558 | 5.420 | 436/1.200 |
+| Trial 16 · τ≈0,323244 | 195 | 383 | 5 | 11.417 | 6.330 | 578/1.200 |
+
+ROC-AUC / Average Precision lần lượt là 0,9921 / 0,8959 cho hai hàng Random Forest mặc định, và 0,9903 / 0,7059 cho Trial 16.
+
+Precision / Recall / F1 theo thứ tự ba hàng là 0,8834 / 0,7200 / 0,7934, 0,4450 / 0,9700 / 0,6101, 0,3374 / 0,9750 / 0,5013.
+
+RF mặc định + quét ngưỡng đạt 5.420, thấp nhất trong các chính sách trên Validation và thấp hơn Trial 16 910 đơn vị (14,38%). Chính sách này giảm 141 FP và 142 lượt kiểm tra, đổi lại tăng 1 FN và Recall giảm từ 97,50% xuống 97,00%. Hai cấu hình khác siêu tham số và class_weight (None và balanced), nên chưa tách được tác động riêng của Optuna.
+
+Baseline fit 45,75 giây và dự đoán Validation 0,110 giây, đỉnh bộ nhớ của job 162,95 MiB. Refit Trial 16 fit 36,01 giây và dự đoán 0,034 giây, đỉnh job 158,02 MiB.
+
+Checkpoint bổ sung khớp số liệu, ngưỡng và 101 điểm lưới Validation lịch sử của Trial 16. Checkpoint dành cho dự đoán CSV. Kết quả Official Test vẫn lấy từ lượt G10 đã lưu.
+
+![Web Demo dự đoán 12 dòng minh họa từ Validation](../figures/web_demo/du-doan-truc-tiep.png)
