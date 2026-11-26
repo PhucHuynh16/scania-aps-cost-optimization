@@ -189,7 +189,7 @@ python -m pytest tests/scania/test_cost_model.py tests/scania/test_constraints.p
 ```
 
 #### Chế độ B — Tái lập quy trình tiền xử lý, huấn luyện & tối ưu hóa
-- Bước tải và tiền xử lý dữ liệu G3 (`data/raw/scania_aps/` và `data/processed/scania_aps/` bị loại trừ khỏi Git qua `.gitignore`): xem hướng dẫn chi tiết tại [`data/README.md`](data/README.md) (`python scripts/run_scania_acquire.py` và `python scripts/run_scania_pipeline.py`).
+- Toàn bộ 12 tệp dữ liệu gốc UCI #421 và dữ liệu tiền xử lý G3 (`data/raw/scania_aps/` và `data/processed/scania_aps/official_20261029_04/`, tổng cộng ~257,5 MiB) đã được đính kèm trực tiếp trong repository (tệp `aps_failure_test_set.csv` vẫn giữ niêm phong bên trong `aps+failure+at+scania+trucks.zip`). Xem chi tiết mã băm SHA-256 và lệnh tái tạo tại [`data/README.md`](data/README.md).
 - Có thể chạy kiểm thử đường ống tối ưu trên dữ liệu tổng hợp bất kỳ lúc nào (không chạm dữ liệu thật):
   ```powershell
   python -m scripts.run_scania_phase2 synthetic --run-id phase2_synthetic_check --trials 3
@@ -225,7 +225,9 @@ scania-aps-cost-optimization/
 │       └── authorizations/                      # Hồ sơ tham chiếu ủy quyền thực thi các lượt chạy thực nghiệm
 │
 ├── data/
-│   └── README.md                                # Nguồn gốc UCI #421, mã băm SHA-256 và quy trình tái tạo G3
+│   ├── README.md                                # Nguồn gốc UCI #421, mã băm SHA-256 và quy trình tái tạo G3
+│   ├── raw/scania_aps/                          # Dữ liệu gốc UCI #421 (ZIP gốc niêm phong Test, Training CSV, mô tả & manifest)
+│   └── processed/scania_aps/                    # Phân vùng G3 official_split.json & official_20261029_04 (.npy, .npz, .joblib)
 │
 ├── docs/
 │   ├── results_analysis.md                      # Phân tích chi tiết kết quả G4, Phase 2 và Gate G10

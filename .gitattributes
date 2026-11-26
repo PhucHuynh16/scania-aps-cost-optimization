@@ -6,3 +6,11 @@
 *.docx binary
 *.pptx binary
 *.png binary
+
+# Dataset and preprocessing artifacts (preserve exact raw bytes and SHA-256 checksums)
+data/raw/** binary
+data/processed/** binary
+*.npy binary
+*.npz binary
+*.joblib binary
+*.zip binary

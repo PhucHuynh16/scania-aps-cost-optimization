@@ -69,7 +69,7 @@ python -m pytest tests/scania/test_cost_model.py tests/scania/test_constraints.p
 ### CHẾ ĐỘ B — Tái Lập Quy Trình Tiền Xử Lý, Huấn Luyện & Tối Ưu Hóa (Reproducing Training & Optimization)
 
 - **Bản chất:** Chạy lại quy trình tải dữ liệu gốc UCI #421, tách Train/Validation G3 và kiểm thử đường ống tối ưu hóa.
-- **Lưu ý quan trọng:** Repository công bố **không đính kèm tệp dữ liệu thô (`~101 MB`) hay mảng `.npy` trung gian (`~164 MB`)** theo quy định dung lượng và bản quyền dữ liệu.
+- **Trạng thái dữ liệu đính kèm:** Toàn bộ 12 tệp dữ liệu gốc UCI #421 (`data/raw/scania_aps/`) và dữ liệu tiền xử lý G3 chính thức (`data/processed/scania_aps/official_split.json` cùng `official_20261029_04/{membership.npz,lr_preprocessor.joblib,tree_preprocessor.joblib,lr_train.npy,lr_validation.npy,tree_train.npy,tree_validation.npy}`) đã được đính kèm đầy đủ trong repository (tệp `aps_failure_test_set.csv` giữ nguyên niêm phong trong `aps+failure+at+scania+trucks.zip`).
 
 #### Bước B.1 — Tải dữ liệu gốc UCI #421 và tái tạo phân vùng G3:
 ```powershell
@@ -98,7 +98,7 @@ Các lệnh `python -m scripts.run_scania_phase2 execute` và `python scripts/ru
   - Ở Phase 2 (`scania_phase2_rf_optuna_002`), hệ thống chỉ lưu cấu hình siêu tham số tốt nhất (`n_estimators=50, max_depth=10, min_samples_split=10, max_features=0.4268663927182804, class_weight='balanced', random_state=42`), ngưỡng quyết định `tau* = 0.3232440937634324` và các bảng chỉ số JSON/CSV.
   - Ở Gate G10 (`scania_g10_official_test_003`), hệ thống thực hiện 1 lần huấn luyện lại xác định trên tập Train 48.000 mẫu (`DETERMINISTIC_TRAIN_REFIT_EVALUATION`), kiểm tra khớp tuyệt đối kết quả Validation (`Cost = 6.330`, `M = 578`) rồi suy luận trên Official Test mà không ghi mô hình `.joblib` ra đĩa.
 - **Cách khôi phục nếu muốn suy luận trên dữ liệu mới:**
-  1. Tải dữ liệu gốc và chạy `scripts/run_scania_pipeline.py` để tạo `tree_train.npy`, `membership.npz` và `tree_preprocessor.joblib` (chứa trung vị 170 cột cảm biến học từ tập Train).
+  1. Sử dụng trực tiếp `tree_train.npy`, `membership.npz` và `tree_preprocessor.joblib` đã có sẵn tại `data/processed/scania_aps/official_20261029_04/` (chứa trung vị 170 cột cảm biến học từ tập Train).
   2. Khởi tạo `RandomForestClassifier` với đúng bộ siêu tham số đóng băng trong `configs/scania/g10_evaluation.json`, gọi `.fit(X_train, y_train)` một lần (~31 giây trên 1 luồng CPU) và dùng `joblib.dump()` lưu mô hình nếu cần tái sử dụng.
   3. Biến đổi mẫu cảm biến 170 cột mới qua `tree_preprocessor.transform(X_new)`, lấy xác suất lớp dương `p = model.predict_proba(X_proc)[:, 1]` và ra quyết định kiểm tra theo quy tắc đóng băng `action = (p >= 0.3232440937634324)`.
 

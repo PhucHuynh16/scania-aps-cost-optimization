@@ -52,12 +52,33 @@ Tệp nén phân phối từ UCI (`https://archive.ics.uci.edu/static/public/421
 
 ---
 
-## 5. HƯỚNG DẪN TẢI DỮ LIỆU & CÁC CHẾ ĐỘ CHẠY LẠI
+## 5. CẤU TRÚC DỮ LIỆU ĐÃ ĐÍNH KÈM TRONG REPOSITORY & HƯỚNG DẪN KIỂM CHỨNG
 
-Theo quy định bảo mật và dung lượng kho Git, toàn bộ thư mục `data/raw/**` và `data/processed/**` nằm trong `.gitignore` (không đính kèm trong kho mã nguồn công khai hay gói ZIP nghiệm thu gọn nhẹ).
+Toàn bộ **12 tệp dữ liệu thực nghiệm chính thức** (`data/raw/scania_aps/` và `data/processed/scania_aps/`) đã được đính kèm trực tiếp trong repository để phục vụ nghiệm thu và tái lập độc lập mà không cần tải lại từ nguồn ngoài:
 
-### 5.1. Chế độ A — Chạy Demo & Kiểm tra kết quả đã lưu (Không cần tải dữ liệu thô)
-Người chấm có thể chạy ngay từ thư mục gốc dự án :
+```text
+data/
+├── README.md                                                     # Tài liệu nguồn gốc, mã băm SHA-256 và hướng dẫn dữ liệu
+├── raw/
+│   └── scania_aps/
+│       ├── acquisition_manifest.json                             # Metadata thu thập dữ liệu UCI #421 (1.218 B)
+│       ├── aps+failure+at+scania+trucks.zip                      # Tệp ZIP gốc UCI #421 chứa Official Test niêm phong (56.618.034 B)
+│       ├── aps_failure_description.txt                           # Tài liệu mô tả thuộc tính gốc từ Scania (4.874 B)
+│       └── aps_failure_training_set.csv                          # Tập phát triển gốc 60.000 mẫu × 171 cột (44.669.194 B)
+└── processed/
+    └── scania_aps/
+        ├── official_split.json                                   # Chỉ số phân vùng Train (48.000) / Validation (12.000), seed=42 (4.969.510 B)
+        └── official_20261029_04/                                 # Artifacts tiền xử lý G3 chính thức (stable_digest: efe781b7...)
+            ├── membership.npz                                    # Vector chỉ số vị trí và nhãn y_train, y_validation (541.018 B)
+            ├── lr_preprocessor.joblib                            # SimpleImputer(median) + StandardScaler fit trên Train 48k (8.065 B)
+            ├── tree_preprocessor.joblib                          # SimpleImputer(median) fit trên Train 48k (3.624 B)
+            ├── lr_train.npy                                      # Ma trận float64 (48.000 × 170) cho Logistic Regression (65.280.128 B)
+            ├── lr_validation.npy                                 # Ma trận float64 (12.000 × 170) cho Logistic Regression (16.320.128 B)
+            ├── tree_train.npy                                    # Ma trận float64 (48.000 × 170) cho Decision Stump & RF (65.280.128 B)
+            └── tree_validation.npy                               # Ma trận float64 (12.000 × 170) cho Decision Stump & RF (16.320.128 B)
+```
+
+### 5.1. Chế độ A — Chạy Demo & Kiểm tra toàn vẹn kết quả thực nghiệm (Read-Only)
 ```powershell
 python scripts/demo.py
 python scripts/demo.py --summary
@@ -66,19 +87,14 @@ python scripts/demo.py --notes
 python scripts/run_scania_g10.py verify
 ```
 
-### 5.2. Chế độ B — Tái lập bước tải dữ liệu và tiền xử lý G3 (Yêu cầu kho Git sạch & Python 3.11)
-Nếu muốn tự tải lại dữ liệu gốc từ UCI và sinh lại các mảng tiền xử lý `.npy` cùng `.joblib`:
+### 5.2. Chế độ B — Kiểm chứng trực tiếp dữ liệu đính kèm hoặc tái tạo lại phân vùng G3
+Với dữ liệu đã có sẵn trong `data/raw/scania_aps/` và `data/processed/scania_aps/`, có thể kiểm chứng hoặc chạy tái tạo lại một lượt phân vùng G3 mới để đối chiếu `stable_digest`:
 ```powershell
-# Cách 1: Dùng script thu thập dữ liệu chính thức của dự án (chỉ giải nén tập Train & mô tả, giữ nguyên Test trong ZIP)
-python scripts/run_scania_acquire.py
-
-# Cách 2: Tải thủ công bằng PowerShell và kiểm tra mã băm SHA-256
-New-Item -ItemType Directory -Force -Path "data/raw/scania_aps"
-Invoke-WebRequest -Uri "https://archive.ics.uci.edu/static/public/421/aps+failure+at+scania+trucks.zip" -OutFile "data/raw/scania_aps/aps+failure+at+scania+trucks.zip"
+# Kiểm tra mã băm SHA-256 của tệp ZIP gốc đính kèm
 Get-FileHash -Algorithm SHA256 "data/raw/scania_aps/aps+failure+at+scania+trucks.zip"
 # Kỳ vọng: 5504D0402F54FAAF97AC0CA085A621645763F5CFEA2EB29C592B057D43D4DB89
 
-# Sinh lại phân vùng official_split.json, mảng .npy và preprocessor .joblib (khớp stable_digest G3)
+# (Tùy chọn) Sinh lại phân vùng G3 vào một run-id kiểm tra mới và đối chiếu stable_digest G3
 python scripts/run_scania_pipeline.py --run-id g3_recheck_local --expect-stable efe781b7e564073a2a764e70a41cfe5c3e8975d33cc38b0fa297ef09f51767bb
 ```
-*Lưu ý về quyền chạy thực nghiệm thật:* Các script `run_scania_baselines.py gate-b2`, `run_scania_phase2.py execute` và `run_scania_g10.py execute` có chốt chặn kiểm tra hồ sơ phê duyệt thực nghiệm gắn với commit SHA tại `configs/scania/authorizations/` nhằm bảo vệ tính nguyên vẹn của kết quả lịch sử. Người dùng độc lập có thể chạy chế độ kiểm thử tổng hợp (`python -m scripts.run_scania_phase2 synthetic --trials 3` và `python scripts/run_scania_g10.py synthetic`) mà không cần phê duyệt.
+*Lưu ý về khóa an toàn thực nghiệm:* Các script `run_scania_baselines.py gate-b2`, `run_scania_phase2.py execute` và `run_scania_g10.py execute` có chốt chặn kiểm tra hồ sơ phê duyệt thực nghiệm gắn với commit SHA tại `configs/scania/authorizations/` nhằm bảo vệ tính nguyên vẹn của kết quả lịch sử. Người dùng độc lập có thể chạy chế độ kiểm thử tổng hợp (`python -m scripts.run_scania_phase2 synthetic --trials 3` và `python scripts/run_scania_g10.py synthetic`) bất kỳ lúc nào.
