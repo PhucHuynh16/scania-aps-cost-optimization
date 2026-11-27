@@ -10,17 +10,17 @@
 ## 1. Kết Luận Tổng Quát
 
 - **Kết luận về nguồn dữ liệu độc lập (`COMPATIBLE_INDEPENDENT`):**
-  > **`NO_VERIFIED_COMPATIBLE_EXTERNAL_DATA`**
+  > **`NO_VERIFIED_COMPATIBLE_EXTERNAL_DATA`** — **Chưa tìm thấy nguồn độc lập tương thích trong phạm vi khảo sát** (bao gồm UCI Machine Learning Repository, OpenML, Kaggle, GitHub, Zenodo, Researchdata.se / Swedish National Data Service, Nature Scientific Data, Figshare, Mendeley Data và IEEE DataPort).
 - **Tổng hợp kết quả phân loại trên 10 nguồn dữ liệu thực tế đã rà soát và kiểm chứng:**
-  - `COMPATIBLE_INDEPENDENT`: **0** nguồn.
-  - `COMPATIBLE_DUPLICATE`: **4** nguồn (`EXT-01` UCI #414, `EXT-02` GitHub `jieqiong-pang`, `EXT-03` GitHub `atagunduzalp`, `EXT-04` Kaggle `uciml`).
+  - `COMPATIBLE_INDEPENDENT`: **0** nguồn (chưa tìm thấy nguồn độc lập tương thích trong phạm vi khảo sát).
+  - `COMPATIBLE_DUPLICATE`: **4** nguồn (`EXT-01` UCI #414, `EXT-02` GitHub `jieqiong-pang`, `EXT-03` GitHub `atagunduzalp`, `EXT-04` Kaggle `uciml` — tất cả đều là bản sao trùng nguồn gốc UCI #421, tuyệt đối không coi UCI #414 hay các bản mirror là dữ liệu độc lập).
   - `PARTIALLY_COMPATIBLE`: **2** nguồn (`EXT-05` OpenML #41138, `EXT-06` OpenML #46908 TabArena).
   - `INCOMPATIBLE`: **4** nguồn (`EXT-07` SCANIA Component X 2024–2025, `EXT-08` MetroPT-3 APU, `EXT-09` AI4I 2020, `EXT-10` Zenodo #22834903 CAOS TruckVitals).
   - `UNVERIFIED`: **0** nguồn.
 
-### Lý giải kỹ thuật vì sao không tồn tại nguồn `COMPATIBLE_INDEPENDENT`
+### Lý giải kỹ thuật vì sao chưa tìm thấy nguồn độc lập tương thích trong phạm vi khảo sát
 
-1. **Đặc thù ẩn danh độc quyền của Scania CV AB (2016):** Bộ dữ liệu *APS Failure at Scania Trucks* công bố tại cuộc thi *IDA 2016 Industrial Challenge* gồm `170` thuộc tính vận hành được mã hóa dưới dạng `Identifier_Bin` bằng 2 chữ cái viết thường (`aa_000`, `ab_000`, ..., `eg_000`), bao gồm các bộ đếm số học tích lũy (numerical counters) và 7 biến histogram. Scania CV AB không công bố bảng ánh xạ từ các mã `aa_000..eg_000` sang tên cảm biến vật lý thực tế hay đơn vị đo. Do đó, không một đơn vị độc lập nào bên ngoài Scania có thể tự thu thập dữ liệu từ xe tải và xuất ra đúng 170 cột `aa_000..eg_000` với cùng thang đo và phân phối bin.
+1. **Đặc thù ẩn danh độc quyền của Scania CV AB (2016):** Bộ dữ liệu *APS Failure at Scania Trucks* công bố tại cuộc thi *IDA 2016 Industrial Challenge* gồm `170` thuộc tính vận hành được mã hóa dưới dạng `Identifier_Bin` bằng 2 chữ cái viết thường (`aa_000`, `ab_000`, ..., `eg_000`), bao gồm các bộ đếm số học tích lũy (numerical counters) và 7 biến histogram. Scania CV AB không công bố bảng ánh xạ từ các mã `aa_000..eg_000` sang tên cảm biến vật lý thực tế hay đơn vị đo. Do đó, trong phạm vi các kho dữ liệu công khai được khảo sát, chưa tìm thấy đơn vị độc lập nào công bố bộ dữ liệu riêng có cùng 170 cột `aa_000..eg_000` với cùng thang đo và phân phối bin.
 2. **Sự thay đổi hoàn toàn về schema trong công bố mới của Scania (2024–2025):** Khi Scania CV AB và Đại học Stockholm công bố bộ dữ liệu bảo trì dự đoán thế hệ mới — **SCANIA Component X Dataset** (*Nature Scientific Data*, 2025, DOI: `10.1038/s41597-025-04802-6`; *Swedish National Data Service*, DOI: `10.5878/bnh5-ka77`) — họ chuyển sang bài toán dự đoán lỗi trên một linh kiện động cơ khác (`Component X`), tổ chức dưới dạng chuỗi thời gian đa bảng (`operational_readouts.csv`, `specifications.csv`, `tte.csv`) và đặt tên thuộc tính bằng mã số (`167_0..167_9`, `158_0..158_9`, `397_0..397_35`...). Vì khác linh kiện, khác cấu trúc thời gian và khác hoàn toàn tập thuộc tính, bộ dữ liệu này là `INCOMPATIBLE` với mô hình 170 thuộc tính hiện tại.
 3. **Mọi nguồn bên ngoài khớp 170 thuộc tính `aa_000..eg_000` đều là bản sao của IDA 2016 Challenge:** Kiểm tra mã băm SHA-256 ở cấp độ tệp và so khớp từng dòng ở cấp độ bản ghi chứng minh tất cả các bản phân phối trên UCI (`#414`), GitHub, Kaggle và OpenML đều bắt nguồn từ đúng 60.000 mẫu Train và 16.000 mẫu Test của IDA 2016 Challenge.
 

@@ -3046,6 +3046,7 @@
       "filename": "demo_invalid.csv",
       "relative_path": "data/examples/demo_cases/demo_invalid.csv",
       "description": "File cố ý sai schema (5 mẫu đầu của Validation nhưng thiếu cột 'eg_000' và thay bằng cột lạ 'invalid_sensor_xyz') để kiểm chứng cơ chế bắt lỗi UploadError.",
+      "row_count_rationale": "Sử dụng 5 dòng (thay vì 10 dòng theo gợi ý ban đầu) vì bộ kiểm tra hợp đồng dữ liệu parse_csv() trong src/scania/live_prediction.py xác thực schema ngay trên dòng header (dòng 1) và từ chối tệp lập tức bằng UploadError trước khi duyệt qua các dòng dữ liệu; 5 dòng dữ liệu đầu của tập Validation là vừa đủ để tạo tệp CSV nhiều dòng hợp lệ về cú pháp nhưng sai schema cột, đồng thời giữ tệp gọn nhẹ (4.950 bytes).",
       "source_file": "data/raw/scania_aps/aps_failure_training_set.csv",
       "source_sha256": "bb484302e3a3a1c8ef5e1f0129c4dc7cbd58f350867f95b575461ca21ab6b9da",
       "partition": "Validation (G3 official_20261029_04)",

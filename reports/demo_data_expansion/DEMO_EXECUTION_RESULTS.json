@@ -1,8 +1,9 @@
 {
-  "report_version": "1.0.0",
-  "generated_at_utc": "2026-11-27T02:26:00Z",
-  "verification_mode": "Real HTTP Backend Server (app.py ThreadingHTTPServer POST /api/predict) + Exact G3 Preprocessor & Checkpoint Verification + Policy Simulation (live.js exact parity)",
-  "ui_browser_note": "Kiểm chứng thực hiện trực tiếp qua HTTP server cục bộ của app.py (/api/predict và /api/evidence) cùng toàn bộ hàm xử lý ngưỡng/công suất tương đương 100% logic web_demo/live.js. Không giả lập bằng chứng ảnh chụp trình duyệt.",
+  "report_version": "1.1.0",
+  "generated_at_utc": "2026-11-27T05:13:00Z",
+  "verification_mode": "Real Browser UI Verification (http://localhost:8517 via built-in browser subagent) + Real HTTP Backend Server (app.py ThreadingHTTPServer POST /api/predict) + Exact G3 Preprocessor & Checkpoint Verification + CSV Export Parity",
+  "ui_browser_note": "Đã kiểm chứng trực tiếp trên giao diện trình duyệt thực tế tại http://localhost:8517 (cổng riêng không xung đột với Codex) cho toàn bộ 10/10 tệp CSV (9 tệp bổ sung + 1 tệp mẫu ban đầu), bao gồm thao tác chọn tệp, chạy dự đoán, hiển thị bảng chỉ số, ma trận nhầm lẫn, thay đổi ngưỡng, thay đổi công suất, bật/tắt ưu tiên Top-K, xử lý lô không nhãn, chặn tệp sai schema và xuất CSV kết quả. Toàn bộ 14 ảnh chụp màn hình trình duyệt thực tế được lưu tại reports/demo_data_expansion/screenshots/.",
+  "undefined_metrics_handling": "Đối với các lô không có mẫu positive thực tế (P = TP + FN = 0, như demo_normal.csv và demo_missing_values.csv), mẫu số của Recall bằng 0 nên Recall không xác định: backend/JSON ghi nhận recall = null và giao diện web_demo/live.js hiển thị rõ ký hiệu '—' (không chia cho 0 hoặc gán 0% sai bản chất). Khi TP = 0 và FP > 0, Precision = 0 / FP = 0% và F1 = 0%.",
   "checkpoint": "trial16_refit_20261127_02",
   "frozen_threshold": 0.3232440937634324,
   "preprocessor_path": "data/processed/scania_aps/official_20261029_04/tree_preprocessor.joblib",
