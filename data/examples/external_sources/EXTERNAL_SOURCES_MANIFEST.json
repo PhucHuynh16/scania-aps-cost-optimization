@@ -1,0 +1,74 @@
+{
+  "catalog_version": "1.0.0",
+  "generated_at_utc": "2026-11-27T02:28:00Z",
+  "independent_data_conclusion": "NO_VERIFIED_COMPATIBLE_EXTERNAL_DATA",
+  "notice": "Tất cả các tệp CSV bên ngoài tương thích với schema 170 thuộc tính (aa_000..eg_000) đều được xác minh là bản sao hoặc tập con của bộ dữ liệu gốc IDA 2016 Industrial Challenge (UCI #421 / UCI #414) do Scania CV AB công bố. Tuyệt đối KHÔNG gọi các tệp này là dữ liệu độc lập.",
+  "distributed_files": [
+    {
+      "filename": "uci414_ida2016_duplicate_validation_50.csv",
+      "relative_path": "data/examples/external_sources/uci414_ida2016_duplicate_validation_50.csv",
+      "classification": "COMPATIBLE_DUPLICATE",
+      "is_independent_data": false,
+      "source_id": "EXT-01",
+      "source_name": "UCI Machine Learning Repository #414 — IDA2016Challenge (to_uci/aps_failure_training_set.csv)",
+      "source_url": "https://archive.ics.uci.edu/dataset/414/ida2016challenge",
+      "source_download_url": "https://archive.ics.uci.edu/static/public/414/ida2016challenge.zip",
+      "source_doi": "10.24432/C5V60Q",
+      "source_zip_sha256": "5336e4b643c4915931879c3db0535139e188732e74122badf0a4eb1749b4e8cb",
+      "source_csv_sha256": "bb484302e3a3a1c8ef5e1f0129c4dc7cbd58f350867f95b575461ca21ab6b9da",
+      "license": "CC BY 4.0 (UCI) / GNU GPLv3-or-later (Scania CV AB description notice)",
+      "redistribution_permitted": true,
+      "selection_rule": "50 mẫu đầu tiên theo thứ tự dòng của tệp to_uci/aps_failure_training_set.csv (UCI #414) nằm trong danh sách phân vùng Validation G3 (official_20261029_04) để tránh rò rỉ các mẫu Train 48k vào quá trình demo.",
+      "row_count": 50,
+      "column_count": 171,
+      "pos_count": 2,
+      "neg_count": 48,
+      "size_bytes": 38484,
+      "sha256": "28fb0bd55db814dbd160b1e1e746508ff0d27988d35224536b179d25056c0f89"
+    }
+  ],
+  "metadata_only_sources": [
+    {
+      "source_id": "EXT-02",
+      "name": "GitHub Mirror — jieqiong-pang/APS-Failure-at-Scania-Trucks-Data-Set",
+      "url": "https://github.com/jieqiong-pang/APS-Failure-at-Scania-Trucks-Data-Set",
+      "classification": "COMPATIBLE_DUPLICATE",
+      "reason_not_redistributed_separately": "Tệp aps_failure_training_set.csv có SHA-256 (bb484302...) trùng khớp 100% từng byte với EXT-01 và UCI #421; repo GitHub cá nhân không khai báo tệp LICENSE riêng."
+    },
+    {
+      "source_id": "EXT-03",
+      "name": "GitHub Mirror — atagunduzalp/truck-data-analysis",
+      "url": "https://github.com/atagunduzalp/truck-data-analysis",
+      "classification": "COMPATIBLE_DUPLICATE",
+      "reason_not_redistributed_separately": "Tệp aps_failure_training_set.csv (SHA-256: cbbcc17b...) chỉ là bản cắt bỏ 20 dòng lời dẫn đầu tệp của UCI #421 (60.000 dòng dữ liệu trùng khớp 100% từng ký tự); repo không khai báo tệp LICENSE riêng."
+    },
+    {
+      "source_id": "EXT-04",
+      "name": "Kaggle Mirror — uciml/aps-failure-at-scania-trucks-data-set",
+      "url": "https://www.kaggle.com/datasets/uciml/aps-failure-at-scania-trucks-data-set",
+      "classification": "COMPATIBLE_DUPLICATE",
+      "reason_not_redistributed_separately": "Bản mirror trực tiếp từ UCI #421 trên Kaggle; yêu cầu tài khoản/API key Kaggle khi tải trực tiếp."
+    },
+    {
+      "source_id": "EXT-05",
+      "name": "OpenML #41138 — APSFailure (v1)",
+      "url": "https://www.openml.org/d/41138",
+      "classification": "PARTIALLY_COMPATIBLE",
+      "reason_not_redistributed_separately": "Định dạng ARFF (SHA-256: e95128fc...), dùng ký hiệu '?' cho dữ liệu thiếu và gộp chung 60.000 mẫu Train + 16.000 mẫu Official Test của UCI #421."
+    },
+    {
+      "source_id": "EXT-06",
+      "name": "OpenML #46908 — APSFailure (v2 TabArena)",
+      "url": "https://www.openml.org/d/46908",
+      "classification": "PARTIALLY_COMPATIBLE",
+      "reason_not_redistributed_separately": "Định dạng ARFF (SHA-256: 14fd7b78...), đổi tên cột nhãn thành 'AirPressureSystemFailure' và gộp chung Train + Official Test của UCI #414/#421."
+    },
+    {
+      "source_id": "EXT-07",
+      "name": "SCANIA Component X Dataset (Swedish National Data Service / Nature Scientific Data)",
+      "url": "https://doi.org/10.5878/bnh5-ka77",
+      "classification": "INCOMPATIBLE",
+      "reason_not_redistributed_separately": "Dữ liệu chuỗi thời gian đa bảng của linh kiện động cơ khác (Component X) với schema thuộc tính hoàn toàn khác (167_0..397_35)."
+    }
+  ]
+}

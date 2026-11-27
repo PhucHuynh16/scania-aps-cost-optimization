@@ -1,0 +1,307 @@
+{
+  "registry_version": "1.0.0",
+  "generated_at_utc": "2026-11-27T02:28:00Z",
+  "project": "Predictive Maintenance Cost Optimization — Scania APS Trucks (UCI 421)",
+  "branch": "antigravity/scania-demo-data-expansion",
+  "independent_data_conclusion": "NO_VERIFIED_COMPATIBLE_EXTERNAL_DATA",
+  "independent_data_summary": "Qua rà soát toàn diện các kho dữ liệu học thuật và công nghiệp (UCI, OpenML, Kaggle, GitHub, Zenodo, Researchdata.se / Swedish National Data Service, Nature Scientific Data, Figshare, Mendeley Data, IEEE DataPort), KHÔNG tồn tại bất kỳ bộ dữ liệu độc lập nào khác ngoài bộ dữ liệu IDA 2016 Challenge của Scania CV AB có cùng schema 170 thuộc tính ẩn danh (aa_000..eg_000) và định nghĩa nhãn lỗi APS. Bộ dữ liệu thực tế mới nhất do Scania công bố (SCANIA Component X, 2024–2025) theo dõi linh kiện động cơ khác với schema chuỗi thời gian hoàn toàn khác (167_0..397_35) nên thuộc nhóm INCOMPATIBLE. Các nguồn tương thích với schema 170 thuộc tính hiện có đều là bản sao hoặc tập con trực tiếp của UCI #421 (thuộc nhóm COMPATIBLE_DUPLICATE hoặc PARTIALLY_COMPATIBLE do biến đổi định dạng ARFF/tên cột).",
+  "classification_counts": {
+    "COMPATIBLE_INDEPENDENT": 0,
+    "COMPATIBLE_DUPLICATE": 4,
+    "PARTIALLY_COMPATIBLE": 2,
+    "INCOMPATIBLE": 4,
+    "UNVERIFIED": 0
+  },
+  "sources": [
+    {
+      "source_id": "EXT-01",
+      "dataset_name": "IDA2016Challenge (APS Failure and Operational Data for Scania Trucks — UCI #414)",
+      "exact_url": "https://archive.ics.uci.edu/dataset/414/ida2016challenge",
+      "download_url": "https://archive.ics.uci.edu/static/public/414/ida2016challenge.zip",
+      "doi": "10.24432/C5V60Q",
+      "authors_or_organization": "Scania CV AB (Tony Lindgren, Stockholm University; Jonas Biteus, Scania CV AB)",
+      "publication_date": "2016-09 (Updated 2017-01-17 on UCI #414)",
+      "origin_and_collection_method": "Dữ liệu vận hành thực tế thu thập từ xe tải hạng nặng Scania phục vụ IDA 2016 Industrial Challenge; được chuyên gia chọn lọc và ẩn danh tên thuộc tính.",
+      "license": "CC BY 4.0 (trang UCI) / GNU General Public License v3 or later (trong tệp aps_failure_description.txt của Scania CV AB)",
+      "rows_and_attributes": "76.000 dòng tổng cộng (60.000 dòng trong to_uci/aps_failure_training_set.csv + 16.000 dòng trong to_uci/aps_failure_test_set.csv) × 171 thuộc tính (1 cột nhãn class + 170 thuộc tính số/histogram aa_000..eg_000).",
+      "data_format": "ZIP chứa 2 tệp CSV (có 20 dòng lời dẫn bản quyền GPLv3 ở đầu mỗi tệp, dòng 21 là header) và 1 tệp TXT mô tả.",
+      "attribute_meaning_and_units": "Tên thuộc tính ẩn danh dạng Identifier_Bin (ví dụ aa_000..eg_000), gồm bộ đếm số học tích lũy (numerical counters) và 7 biến histogram chia theo các khoảng điều kiện vận hành (nhiệt độ, áp suất...); đơn vị vật lý cụ thể không được Scania công bố vì lý do bảo mật công nghiệp.",
+      "failure_label_definition": "Cột class nhận giá trị 'pos' (lỗi thuộc một linh kiện cụ thể của hệ thống khí nén APS) hoặc 'neg' (xe tải gặp lỗi ở các bộ phận không liên quan đến APS).",
+      "schema_compatibility": "Tương thích 100% với schema 170 thuộc tính aa_000..eg_000 và cột class {pos, neg} sau khi tách 20 dòng lời dẫn đầu tệp.",
+      "overlap_with_uci421": "Trùng khớp 100% cấp độ byte và bản ghi với UCI #421 (SHA-256 của to_uci/aps_failure_training_set.csv và to_uci/aps_failure_test_set.csv giống hệt 100% với các tệp trong aps+failure+at+scania+trucks.zip của UCI #421).",
+      "downloaded_files_sha256": {
+        "uci_414_ida2016challenge.zip": {
+          "size_bytes": 20957291,
+          "sha256": "5336e4b643c4915931879c3db0535139e188732e74122badf0a4eb1749b4e8cb"
+        },
+        "to_uci/aps_failure_training_set.csv": {
+          "size_bytes": 44669194,
+          "sha256": "bb484302e3a3a1c8ef5e1f0129c4dc7cbd58f350867f95b575461ca21ab6b9da"
+        },
+        "to_uci/aps_failure_test_set.csv": {
+          "size_bytes": 11943558,
+          "sha256": "2cdf6f7661c7b4c63333c93cdec36a3a82350176b604a2312cf82799fb2712f3"
+        },
+        "to_uci/aps_failure_description.txt": {
+          "size_bytes": 4874,
+          "sha256": "57b1eb3c551a678ffc1c8112e5b34c566dd16457642563f58aeb3ca65beeb820"
+        }
+      },
+      "classification": "COMPATIBLE_DUPLICATE",
+      "included_in_demo": true,
+      "demo_file_created": "data/examples/external_sources/uci414_ida2016_duplicate_validation_50.csv",
+      "verification_conclusion_and_evidence": "Đã tải trực tiếp tệp ZIP từ UCI #414 và đối chiếu SHA-256. Tệp training set (44.669.194 bytes) có SHA-256 bb484302... trùng tuyệt đối 100% với tệp gốc UCI #421. Đã trích 50 mẫu thuộc phân vùng Validation G3 từ nguồn này để đưa vào data/examples/external_sources/uci414_ida2016_duplicate_validation_50.csv và ghi rõ là COMPATIBLE_DUPLICATE (bản sao trùng nguồn gốc UCI, tuyệt đối không phải dữ liệu độc lập)."
+    },
+    {
+      "source_id": "EXT-02",
+      "dataset_name": "GitHub Mirror — jieqiong-pang/APS-Failure-at-Scania-Trucks-Data-Set",
+      "exact_url": "https://github.com/jieqiong-pang/APS-Failure-at-Scania-Trucks-Data-Set",
+      "download_url": "https://raw.githubusercontent.com/jieqiong-pang/APS-Failure-at-Scania-Trucks-Data-Set/master/aps_failure_training_set.csv",
+      "doi": null,
+      "authors_or_organization": "Jieqiong Pang (mirror lại từ Scania CV AB / UCI #421)",
+      "publication_date": "2020-02-09",
+      "origin_and_collection_method": "Bản sao trực tiếp các tệp gốc từ UCI Machine Learning Repository (#421 / #414) phục vụ thực nghiệm phân loại cây quyết định.",
+      "license": "Không khai báo giấy phép repo riêng; tệp aps_failure_description.txt đính kèm giữ nguyên thông báo bản quyền GNU GPLv3 của Scania CV AB (2016).",
+      "rows_and_attributes": "60.000 dòng (training) + 16.000 dòng (test) × 171 thuộc tính.",
+      "data_format": "CSV (giữ nguyên 20 dòng lời dẫn GPLv3 ở đầu tệp).",
+      "attribute_meaning_and_units": "Giống hệt UCI #421 (170 thuộc tính ẩn danh aa_000..eg_000).",
+      "failure_label_definition": "Cột class ('pos' / 'neg') giống hệt UCI #421.",
+      "schema_compatibility": "Tương thích 100% với schema sau khi bỏ 20 dòng lời dẫn đầu tệp.",
+      "overlap_with_uci421": "Trùng khớp 100% từng byte với UCI #421 (SHA-256: bb484302e3a3a1c8ef5e1f0129c4dc7cbd58f350867f95b575461ca21ab6b9da).",
+      "downloaded_files_sha256": {
+        "aps_failure_training_set.csv": {
+          "size_bytes": 44669194,
+          "sha256": "bb484302e3a3a1c8ef5e1f0129c4dc7cbd58f350867f95b575461ca21ab6b9da"
+        },
+        "aps_failure_description.txt": {
+          "size_bytes": 4874,
+          "sha256": "57b1eb3c551a678ffc1c8112e5b34c566dd16457642563f58aeb3ca65beeb820"
+        }
+      },
+      "classification": "COMPATIBLE_DUPLICATE",
+      "included_in_demo": false,
+      "demo_file_created": null,
+      "verification_conclusion_and_evidence": "Đã tải xuống và xác minh SHA-256 trùng khớp 100% cấp độ byte với tệp aps_failure_training_set.csv của UCI #421. Không lưu lặp lại tệp thứ hai vì trùng hoàn toàn với lát cắt đại diện từ EXT-01."
+    },
+    {
+      "source_id": "EXT-03",
+      "dataset_name": "GitHub Mirror — atagunduzalp/truck-data-analysis (Header-Cleaned CSV Mirror)",
+      "exact_url": "https://github.com/atagunduzalp/truck-data-analysis",
+      "download_url": "https://raw.githubusercontent.com/atagunduzalp/truck-data-analysis/master/aps_failure_training_set.csv",
+      "doi": null,
+      "authors_or_organization": "Alp Atagündüz (mirror từ Kaggle/UCI Scania APS)",
+      "publication_date": "2020-06-28",
+      "origin_and_collection_method": "Bản sao tập dữ liệu Scania APS UCI #421/Kaggle đã cắt bỏ 20 dòng lời dẫn GPLv3 đầu tệp để dòng 1 là header CSV chuẩn.",
+      "license": "Không khai báo giấy phép repo riêng trên GitHub (nguồn gốc dữ liệu từ Scania CV AB / UCI).",
+      "rows_and_attributes": "60.000 dòng × 171 thuộc tính (training) + 16.000 dòng × 171 thuộc tính (test).",
+      "data_format": "CSV chuẩn UTF-8 (dòng 1 là header 'class,aa_000,...,eg_000', 60.000 dòng dữ liệu tiếp theo).",
+      "attribute_meaning_and_units": "Giống hệt UCI #421 (170 thuộc tính ẩn danh aa_000..eg_000).",
+      "failure_label_definition": "Cột class ('pos' / 'neg') giống hệt UCI #421.",
+      "schema_compatibility": "Tương thích trực tiếp 100% với parser của Web Demo (dòng 1 là header chuẩn, nếu trích xuất một lô <= 1.000 dòng và <= 4 MiB).",
+      "overlap_with_uci421": "Trùng khớp 100% ở cấp độ bản ghi: toàn bộ 60.000 dòng dữ liệu (dòng 2..60001) giống hệt từng ký tự với 60.000 dòng dữ liệu (dòng 22..60021) của UCI #421 aps_failure_training_set.csv.",
+      "downloaded_files_sha256": {
+        "gh_atagunduzalp_train.csv": {
+          "size_bytes": 44668322,
+          "sha256": "cbbcc17b812feaff4433b4aac7fb1e94b8a95381e93a29e63069afd20782d5d8"
+        },
+        "gh_atagunduzalp_desc.txt": {
+          "size_bytes": 2694,
+          "sha256": "e1ab65c879f4a79b65c5fc7696d837d6b1b8851436e987b29647a8966006584b"
+        }
+      },
+      "classification": "COMPATIBLE_DUPLICATE",
+      "included_in_demo": false,
+      "demo_file_created": null,
+      "verification_conclusion_and_evidence": "Đã tải xuống tệp 44.668.322 bytes (ít hơn tệp UCI #421 đúng 872 bytes của 20 dòng lời dẫn đầu tệp) và đối chiếu 60.000 bản ghi: khớp chính xác 100% (ata_data == raw_data là True). Vì repo GitHub cá nhân này không đính kèm tệp LICENSE rõ ràng và nội dung 60.000 bản ghi trùng 100% với UCI #414/#421 có giấy phép chuẩn, chỉ lưu metadata và mã băm SHA-256."
+    },
+    {
+      "source_id": "EXT-04",
+      "dataset_name": "Kaggle — Air Pressure System Failures in Scania Trucks (uciml/aps-failure-at-scania-trucks-data-set)",
+      "exact_url": "https://www.kaggle.com/datasets/uciml/aps-failure-at-scania-trucks-data-set",
+      "download_url": "https://www.kaggle.com/datasets/uciml/aps-failure-at-scania-trucks-data-set/download",
+      "doi": null,
+      "authors_or_organization": "UCI Machine Learning Community Mirror on Kaggle (Scania CV AB donor)",
+      "publication_date": "2017",
+      "origin_and_collection_method": "Bản mirror trực tiếp bộ dữ liệu UCI #421 lên nền tảng Kaggle đã bỏ 20 dòng lời dẫn đầu tệp (giống cấu trúc tệp trong EXT-03).",
+      "license": "GNU GPLv3 / CC BY 4.0 (theo mô tả nguồn UCI).",
+      "rows_and_attributes": "60.000 dòng (training) + 16.000 dòng (test) × 171 thuộc tính.",
+      "data_format": "CSV chuẩn (đã bỏ 20 dòng lời dẫn).",
+      "attribute_meaning_and_units": "170 thuộc tính ẩn danh aa_000..eg_000 giống hệt UCI #421.",
+      "failure_label_definition": "Cột class ('pos' / 'neg') giống hệt UCI #421.",
+      "schema_compatibility": "Tương thích 100% với schema 170 thuộc tính của hệ thống (khi cắt lô <= 1.000 dòng).",
+      "overlap_with_uci421": "Bản sao 100% của UCI #421 (trùng khớp với bản mirror GitHub EXT-03 vốn lấy từ Kaggle uciml).",
+      "downloaded_files_sha256": {
+        "note": "Kaggle yêu cầu xác thực tài khoản API token khi tải trực tiếp; tệp mirror tương ứng từ Kaggle trong EXT-03 có SHA-256 cbbcc17b812feaff4433b4aac7fb1e94b8a95381e93a29e63069afd20782d5d8."
+      },
+      "classification": "COMPATIBLE_DUPLICATE",
+      "included_in_demo": false,
+      "demo_file_created": null,
+      "verification_conclusion_and_evidence": "Xác minh qua cấu trúc tệp và bản mirror Kaggle (EXT-03): đây là bản sao 100% của UCI #421, không phải nguồn dữ liệu thu thập độc lập."
+    },
+    {
+      "source_id": "EXT-05",
+      "dataset_name": "OpenML #41138 — APSFailure (Version 1)",
+      "exact_url": "https://www.openml.org/d/41138",
+      "download_url": "https://openml.org/data/v1/download/19335511/APSFailure.arff",
+      "doi": null,
+      "authors_or_organization": "Scania, Tony Lindgren, Jonas Biteus (Uploaded to OpenML 2018-08-15)",
+      "publication_date": "2018-08-15T20:54:50",
+      "origin_and_collection_method": "Gộp 60.000 mẫu Train và 16.000 mẫu Test của IDA 2016 Challenge (UCI #414/#421) thành một tệp ARFF duy nhất gồm 76.000 mẫu.",
+      "license": "CC0 (khai báo trên metadata OpenML) / GNU GPL v3 (ghi trong phần description của OpenML)",
+      "rows_and_attributes": "76.000 dòng × 171 thuộc tính (class + 170 thuộc tính aa_000..eg_000).",
+      "data_format": "ARFF (Attribute-Relation File Format) và Parquet.",
+      "attribute_meaning_and_units": "170 thuộc tính ẩn danh aa_000..eg_000 giống UCI #421, nhưng giá trị số được định dạng kiểu số thực (ví dụ 2130706438.0, 280.0) và giá trị thiếu ký hiệu là '?' theo chuẩn ARFF thay vì 'na'.",
+      "failure_label_definition": "@ATTRIBUTE class {pos, neg}.",
+      "schema_compatibility": "Tương thích một phần (PARTIALLY_COMPATIBLE): Cùng 170 tên và thứ tự thuộc tính aa_000..eg_000, nhưng định dạng tệp là ARFF (không có dòng header CSV, dùng '@ATTRIBUTE'/'@DATA') và ký hiệu giá trị thiếu là '?' thay vì 'na' hoặc chuỗi rỗng nên không thể nạp trực tiếp vào parse_csv của Web Demo nếu không qua bước chuyển đổi định dạng.",
+      "overlap_with_uci421": "Trùng 100% nguồn dữ liệu gốc: 60.000 dòng đầu là tập Train UCI #421 và 16.000 dòng cuối là tập Official Test UCI #421.",
+      "downloaded_files_sha256": {
+        "openml_41138.json": {
+          "size_bytes": 1184,
+          "sha256": "cb57257e767d97ab2a16725f9e2533e9a709cdd57f9df457ca5db7e757a04348"
+        },
+        "openml_41138_APSFailure.arff": {
+          "size_bytes": 78399357,
+          "sha256": "e95128fc82ef5d5bc5a732b0bc63dea0f6e285cc60f31290c81f82ea13429c4f"
+        }
+      },
+      "classification": "PARTIALLY_COMPATIBLE",
+      "included_in_demo": false,
+      "demo_file_created": null,
+      "verification_conclusion_and_evidence": "Đã tải xuống tệp ARFF (78.399.357 bytes, SHA-256: e95128fc...) và kiểm tra cấu trúc: tệp dùng cú pháp ARFF với ký hiệu thiếu '?' và gộp lẫn cả 16.000 dòng Official Test. Theo quy định không tự ý sửa định dạng/ép schema và không chạm vào Official Test, nguồn này được phân loại là PARTIALLY_COMPATIBLE (và trùng nguồn gốc UCI #421) nên loại khỏi bộ CSV demo."
+    },
+    {
+      "source_id": "EXT-06",
+      "dataset_name": "OpenML #46908 — APSFailure (Version 2 — TabArena Tabular ML IID Study)",
+      "exact_url": "https://www.openml.org/d/46908",
+      "download_url": "https://openml.org/data/v1/download/22125219/APSFailure.arff",
+      "doi": "10.24432/C5V60Q (Original Data Source cited)",
+      "authors_or_organization": "TabArena Team (curated from UCI IDA2016Challenge)",
+      "publication_date": "2025-04-30T19:54:32",
+      "origin_and_collection_method": "Tập dữ liệu UCI IDA2016Challenge được nhóm nghiên cứu TabArena gộp chung Train + Test (76.000 dòng), đổi tên cột mục tiêu từ 'class' thành 'AirPressureSystemFailure' và chuyển đổi sang ARFF/Parquet.",
+      "license": "CC BY 4.0",
+      "rows_and_attributes": "76.000 dòng × 171 thuộc tính (AirPressureSystemFailure + 170 thuộc tính aa_000..eg_000).",
+      "data_format": "ARFF và Parquet.",
+      "attribute_meaning_and_units": "170 thuộc tính ẩn danh aa_000..eg_000 giống UCI #421.",
+      "failure_label_definition": "@ATTRIBUTE AirPressureSystemFailure {neg, pos}.",
+      "schema_compatibility": "Tương thích một phần (PARTIALLY_COMPATIBLE): Ngoài việc ở định dạng ARFF với ký hiệu '?' cho giá trị thiếu, cột nhãn đã bị đổi tên thành 'AirPressureSystemFailure' nên nếu xuất thẳng ra CSV sẽ bị parse_csv của Web Demo từ chối vì 'có 1 cột ngoài schema (AirPressureSystemFailure)'.",
+      "overlap_with_uci421": "Trùng 100% nguồn dữ liệu gốc với UCI #421 (gộp 60.000 dòng Train + 16.000 dòng Test).",
+      "downloaded_files_sha256": {
+        "openml_46908.json": {
+          "size_bytes": 2383,
+          "sha256": "d18d6442b145f374672126ad807473b38700655c66b7a4e905d507c597fed4a1"
+        },
+        "openml_46908_APSFailure.arff": {
+          "size_bytes": 78323905,
+          "sha256": "14fd7b78bb6d1257eb8165f6294f720f6f867fc60bb413f0e4398ef6e5a2bb00"
+        }
+      },
+      "classification": "PARTIALLY_COMPATIBLE",
+      "included_in_demo": false,
+      "demo_file_created": null,
+      "verification_conclusion_and_evidence": "Đã tải xuống tệp ARFF (78.323.905 bytes, SHA-256: 14fd7b78...) và xác minh dòng khai báo '@ATTRIBUTE AirPressureSystemFailure {neg, pos}'. Bị loại vì khác định dạng (ARFF), đổi tên cột mục tiêu và gộp lẫn Official Test."
+    },
+    {
+      "source_id": "EXT-07",
+      "dataset_name": "SCANIA Component X Dataset: A Real-World Multivariate Time Series Dataset for Predictive Maintenance",
+      "exact_url": "https://researchdata.se/en/catalogue/dataset/2024-34",
+      "download_url": "https://doi.org/10.5878/bnh5-ka77",
+      "doi": "10.5878/bnh5-ka77 (Dataset) / 10.1038/s41597-025-04802-6 (Nature Scientific Data Paper)",
+      "authors_or_organization": "Scania CV AB & Stockholm University / Halmstad University (Zahra Kharazian, Tony Lindgren, et al.)",
+      "publication_date": "2024–2025 (Scientific Data article published 2025)",
+      "origin_and_collection_method": "Dữ liệu chuỗi thời gian đa biến (multivariate time-series) thu thập từ đội xe tải hạng nặng Scania xoay quanh một linh kiện động cơ ẩn danh ('Component X'), tách thành nhiều bảng: operational_readouts.csv, specifications.csv,tte.csv, validation_labels.csv.",
+      "license": "CC BY 4.0",
+      "rows_and_attributes": "Đa bảng chuỗi thời gian theo vehicle_id và time_step; gồm 14 biến vận hành (6 biến histogram đa bin như 167_0..167_9, 158_0..158_9, 272_0..272_9, 291_0..291_10, 459_0..459_19, 397_0..397_35 và 8 bộ đếm số học như 171_0, 666_0, 837_0, 100_0...) cùng 8 thuộc tính cấu hình tĩnh Spec_0..Spec_7 (~107 cột đặc trưng, không phải 170 cột aa_000..eg_000).",
+      "data_format": "CSV đa bảng (relational time-series tables).",
+      "attribute_meaning_and_units": "Các biến ẩn danh bằng mã số (numeric variable IDs dạng 167_0, 158_0...) kèm vehicle_id và time_step; hoàn toàn khác quy ước mã chữ cái 2 ký tự (aa_000..eg_000) của bộ Scania APS 2016.",
+      "failure_label_definition": "Nhãn sự kiện sửa chữa và thời gian sống sót (Time-to-Event / right-censored survival labels và class_label theo cửa sổ thời gian trước khi hỏng Component X).",
+      "schema_compatibility": "Không tương thích (INCOMPATIBLE): Khác hoàn toàn hệ thống linh kiện mục tiêu (Component X của động cơ thay vì APS), khác cấu trúc dữ liệu (chuỗi thời gian đa bảng theo vehicle_id/time_step thay vì bảng tĩnh 1 dòng/mẫu) và khác hoàn toàn số lượng cũng như tên thuộc tính (~107 cột mã số so với 170 cột chữ cái aa_000..eg_000).",
+      "overlap_with_uci421": "0% (bộ dữ liệu độc lập mới của Scania nhưng dành cho bài toán và linh kiện hoàn toàn khác).",
+      "downloaded_files_sha256": {
+        "note": "Đã kiểm chứng schema và danh mục thuộc tính qua công bố chính thức Nature Scientific Data (DOI: 10.1038/s41597-025-04802-6) và Swedish National Data Service (DOI: 10.5878/bnh5-ka77)."
+      },
+      "classification": "INCOMPATIBLE",
+      "included_in_demo": false,
+      "demo_file_created": null,
+      "verification_conclusion_and_evidence": "Đây là bộ dữ liệu công khai chính thức thứ hai của Scania CV AB sau bộ APS 2016. Tuy nhiên, do khác hoàn toàn linh kiện mục tiêu, cấu trúc chuỗi thời gian và hệ thống thuộc tính (167_0..397_35 vs aa_000..eg_000), tuyệt đối không được phép ánh xạ cưỡng bức hay thêm cột giả vào mô hình hiện tại. Phân loại: INCOMPATIBLE."
+    },
+    {
+      "source_id": "EXT-08",
+      "dataset_name": "MetroPT-3 Dataset (Air Production Unit / Compressor Predictive Maintenance — UCI #791 / Zenodo)",
+      "exact_url": "https://archive.ics.uci.edu/dataset/791/metropt+3+dataset",
+      "download_url": "https://doi.org/10.24432/C5VW3R",
+      "doi": "10.24432/C5VW3R",
+      "authors_or_organization": "INESC TEC / Porto Metro (Narjes Davari, Bruno Veloso, et al.)",
+      "publication_date": "2022–2023",
+      "origin_and_collection_method": "Dữ liệu cảm biến chuỗi thời gian (1 Hz) thu thập từ hệ thống sản xuất khí nén (Air Production Unit - APU) trên tàu điện ngầm tại Porto, Bồ Đào Nha.",
+      "license": "CC BY 4.0",
+      "rows_and_attributes": "1.516.948 dòng × 15 thuộc tính (timestamp, TP2, TP3, H1, DV_pressure, Reservoirs, Oil_temperature, Motor_current, COMP, DV_eletric, Towers, MPG, LPS, Pressure_switch, Oil_level, Caudal_impulses).",
+      "data_format": "CSV chuỗi thời gian.",
+      "attribute_meaning_and_units": "Áp suất khí nén (bar), nhiệt độ dầu (°C), dòng điện động cơ (A), tín hiệu van điện từ (0/1).",
+      "failure_label_definition": "Khoảng thời gian xảy ra sự cố rò rỉ khí hoặc lỗi máy nén theo nhật ký bảo trì.",
+      "schema_compatibility": "Không tương thích (INCOMPATIBLE): Dù cùng thuộc miền hệ thống khí nén (Air Production Unit / Air Pressure System), bộ dữ liệu này chỉ có 15 kênh cảm biến vật lý trực tiếp từ tàu điện ngầm, không có 170 thuộc tính histogram/counter ẩn danh aa_000..eg_000 của xe tải Scania.",
+      "overlap_with_uci421": "0%.",
+      "downloaded_files_sha256": {
+        "note": "Kiểm chứng trực tiếp qua schema công bố của UCI #791 (15 thuộc tính vật lý)."
+      },
+      "classification": "INCOMPATIBLE",
+      "included_in_demo": false,
+      "demo_file_created": null,
+      "verification_conclusion_and_evidence": "Cùng lĩnh vực bảo trì dự đoán hệ thống khí nén (APU/APS) nhưng khác phương tiện và khác hoàn toàn schema (15 cột vs 170 cột aa_000..eg_000). Phân loại: INCOMPATIBLE."
+    },
+    {
+      "source_id": "EXT-09",
+      "dataset_name": "AI4I 2020 Predictive Maintenance Dataset (UCI #601)",
+      "exact_url": "https://archive.ics.uci.edu/dataset/601/ai4i+2020+predictive+maintenance+dataset",
+      "download_url": "https://doi.org/10.24432/C5HS5C",
+      "doi": "10.24432/C5HS5C",
+      "authors_or_organization": "Stephan Matzka (HTW Berlin)",
+      "publication_date": "2020",
+      "origin_and_collection_method": "Dữ liệu tổng hợp mô phỏng quá trình phay công nghiệp (industrial milling machine).",
+      "license": "CC BY 4.0",
+      "rows_and_attributes": "10.000 dòng × 14 thuộc tính (UID, Product ID, Type, Air temperature [K], Process temperature [K], Rotational speed [rpm], Torque [Nm], Tool wear [min], Machine failure, TWF, HDF, PWF, OSF, RNF).",
+      "data_format": "CSV.",
+      "attribute_meaning_and_units": "Nhiệt độ (K), tốc độ quay (rpm), mô-men xoắn (Nm), độ mòn dao (min).",
+      "failure_label_definition": "Machine failure (0/1) và 5 chế độ lỗi thành phần.",
+      "schema_compatibility": "Không tương thích (INCOMPATIBLE): Chỉ có 14 thuộc tính máy công cụ, hoàn toàn khác schema 170 thuộc tính Scania APS.",
+      "overlap_with_uci421": "0%.",
+      "downloaded_files_sha256": {
+        "note": "Kiểm chứng theo hợp đồng src/scania/contracts.py ('AI4I is independent') và schema UCI #601."
+      },
+      "classification": "INCOMPATIBLE",
+      "included_in_demo": false,
+      "demo_file_created": null,
+      "verification_conclusion_and_evidence": "Không tương thích với mô hình Scania APS 170 thuộc tính. Phân loại: INCOMPATIBLE."
+    },
+    {
+      "source_id": "EXT-10",
+      "dataset_name": "Zenodo #22834903 — CAOS TruckVitals / Regime Conditioning Benchmark on Load-Varying Fleet Telemetry",
+      "exact_url": "https://zenodo.org/records/22834903",
+      "download_url": "https://zenodo.org/api/records/22834903",
+      "doi": "10.5281/zenodo.22834903",
+      "authors_or_organization": "Felipe Santibáñez-Leal (CAOS open-research programme)",
+      "publication_date": "2026-09-18",
+      "origin_and_collection_method": "Báo cáo nghiên cứu và benchmark phát hiện điểm thay đổi (change-point detection) trên dữ liệu telemetry xe tải mỏ tổng hợp và NASA C-MAPSS, có trích dẫn SCANIA APS (10.24432/C51S51) và SCANIA Component X (10.5878/jvb5-d390).",
+      "license": "CC BY 4.0 / MIT",
+      "rows_and_attributes": "Tệp báo cáo PDF (290.702 bytes) và mã nguồn mô phỏng đội xe tải mỏ tổng hợp (strut pressure, brake temperature, fuel rate); không chứa bảng dữ liệu thực tế 170 thuộc tính của Scania APS.",
+      "data_format": "PDF / Python codebase.",
+      "attribute_meaning_and_units": "Biến vật lý mô phỏng chu trình xe tải mỏ (áp suất giảm xóc, nhiệt độ phanh, mức tiêu thụ nhiên liệu).",
+      "failure_label_definition": "Thời điểm khởi phát lỗi (fault onset) trên chuỗi thời gian.",
+      "schema_compatibility": "Không tương thích (INCOMPATIBLE): Không phải bảng dữ liệu 170 thuộc tính aa_000..eg_000 của Scania APS.",
+      "overlap_with_uci421": "0% (chỉ trích dẫn tài liệu UCI #421).",
+      "downloaded_files_sha256": {
+        "zenodo_aps.json": {
+          "size_bytes": 165358,
+          "sha256": "4a7e2e48b4f79728a2cb00bd18db5a8e3c1e2e8b5c920cd89481699b100caf51"
+        },
+        "zenodo_scania.json": {
+          "size_bytes": 145901,
+          "sha256": "516dacafc2d6235f59fc73d5cbea2e910c442b7c1e56069b8fa041c9cc3c0693"
+        }
+      },
+      "classification": "INCOMPATIBLE",
+      "included_in_demo": false,
+      "demo_file_created": null,
+      "verification_conclusion_and_evidence": "Đã truy vấn trực tiếp Zenodo REST API với các từ khóa 'Scania APS' và 'APS Failure Scania'. Các bản ghi trả về chỉ là bài báo/báo cáo trích dẫn UCI #421 hoặc nghiên cứu khác, hoàn toàn không có bộ dữ liệu Scania APS độc lập nào trên Zenodo. Phân loại: INCOMPATIBLE."
+    }
+  ]
+}
